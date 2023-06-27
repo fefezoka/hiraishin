@@ -23,12 +23,6 @@ const playersInfo = [
 ];
 
 export const getStaticProps: GetStaticProps = async () => {
-  const champions = await axios
-    .get('http://ddragon.leagueoflegends.com/cdn/13.12.1/data/en_US/champion.json')
-    .then(
-      (response) => Object.values(response.data.data) as { key: string; name: string }[]
-    );
-
   const players = await Promise.all<Player>(
     playersInfo.map(async (info) => {
       const player = await axios
@@ -45,22 +39,7 @@ export const getStaticProps: GetStaticProps = async () => {
           response.data.find((league: League) => league.queueType === 'RANKED_SOLO_5x5')
         );
 
-      const masteries = await axios
-        .get(
-          `https://br1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/${player.id}/top?count=3`
-        )
-        .then(async (response) => {
-          return response.data.map((mastery: any) => {
-            return {
-              ...mastery,
-              championName: champions.find(
-                (champion: any) => champion.key == mastery.championId
-              )?.name,
-            };
-          });
-        });
-
-      return { ...info, ...player, league, masteries };
+      return { ...info, ...player, league };
     })
   ).then((response) =>
     response.sort((a, b) => {
