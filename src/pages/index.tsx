@@ -1,9 +1,9 @@
 import Image from 'next/image';
-import { Poppins } from 'next/font/google';
 import { GetStaticProps } from 'next';
+import { Poppins } from 'next/font/google';
 import axios from '../service/axios';
 import * as Collapsible from '@radix-ui/react-collapsible';
-import MatchHistory from './components/match-history';
+import { MatchHistory } from '@components';
 
 const poppins = Poppins({ weight: '400', subsets: ['latin'] });
 const elos = ['IRON', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND'];

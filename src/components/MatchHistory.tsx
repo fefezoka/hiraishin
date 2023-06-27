@@ -1,5 +1,5 @@
 import React from 'react';
-import { trpc } from '../../utils/trpc';
+import { trpc } from '../utils/trpc';
 import Image from 'next/image';
 
 const spells = {
@@ -14,7 +14,7 @@ const spells = {
   32: 'Snowball',
 } as Record<number, string>;
 
-export default function MatchHistory({ player }: { player: Player }) {
+export const MatchHistory = ({ player }: { player: Player }) => {
   const { data } = trpc.matchHistory.useQuery({ puuid: player.puuid });
 
   return (
@@ -132,4 +132,4 @@ export default function MatchHistory({ player }: { player: Player }) {
       )}
     </div>
   );
-}
+};
