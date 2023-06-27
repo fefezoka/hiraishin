@@ -19,16 +19,16 @@ export const MatchHistory = ({ player }: { player: Player }) => {
   const { data } = trpc.matchHistory.useQuery({ puuid: player.puuid });
 
   return (
-    <div className="h-full py-2 border-b divide-y divide-slate-600">
+    <div className="h-full py-2 border-t divide-y divide-slate-600">
       {data ? (
         data.map((match, index) => {
           const summoner = match.info.participants.find(
             (participant: any) => participant.summonerName === player.name
-          );
+          )!;
 
           return (
             <div key={index}>
-              <div className="flex justify-between md:px-[24px] py-2 items-center">
+              <div className="flex justify-between px-4 md:px-6 py-2 items-center">
                 <div className="flex gap-0.5">
                   <div className="relative">
                     <Image
@@ -57,13 +57,19 @@ export const MatchHistory = ({ player }: { player: Player }) => {
                   </div>
                 </div>
                 <div className="flex flex-col items-center text-sm">
-                  <span className="font-bold">Ranqueada solo</span>
+                  <span className="font-bold">Ranqueada Solo</span>
                   <span
+                    data-remake={summoner.gameEndedInEarlySurrender}
+                    data-win={summoner.win}
                     className={
-                      (summoner.win ? 'text-green-500' : 'text-red-500') + ' font-bold'
+                      'data-[remake=false]:data-[win=true]:text-green-500 data-[remake=false]:data-[win=false]:text-red-500 font-bold'
                     }
                   >
-                    {summoner.win ? 'Vitória' : 'Derrota'}
+                    {!summoner.gameEndedInEarlySurrender
+                      ? summoner.win
+                        ? 'Vitória'
+                        : 'Derrota'
+                      : 'Remake'}
                   </span>
                   <span>
                     {new Intl.DateTimeFormat('pt-BR', {
@@ -91,7 +97,10 @@ export const MatchHistory = ({ player }: { player: Player }) => {
                     item4: summoner.item4,
                     item5: summoner.item5,
                   }).map((item, index) => (
-                    <div key={index} className="w-[24px] h-[24px] relative bg-indigo-900">
+                    <div
+                      key={index}
+                      className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] relative bg-indigo-900"
+                    >
                       {item !== 0 && (
                         <Image
                           src={`http://ddragon.leagueoflegends.com/cdn/13.12.1/img/item/${item}.png`}
@@ -102,14 +111,14 @@ export const MatchHistory = ({ player }: { player: Player }) => {
                     </div>
                   ))}
                 </div>
-                <div className="flex gap-1">
+                <div className="hidden md:flex gap-1">
                   {[
                     match.info.participants.slice(0, 5),
                     match.info.participants.slice(5, 10),
                   ].map((team, index) => (
                     <div key={index} className="w-[100px]">
                       {team.map((participant: any) => (
-                        <div key={participant.puuid} className="flex flex-gol ">
+                        <div key={participant.puuid} className="flex gap-1 items-center">
                           <Image
                             data-player={participant.summonerName === player.name}
                             src={`http://ddragon.leagueoflegends.com/cdn/13.12.1/img/champion/${participant.championName}.png`}

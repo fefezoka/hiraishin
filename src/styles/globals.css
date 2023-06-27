@@ -16,12 +16,20 @@
   }
 }
 
+*::-webkit-scrollbar {
+  width: 1rem;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: rgb(28, 30, 64);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(40, 42, 100);
+}
+
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
+  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb)))
     rgb(var(--background-start-rgb));
 }
