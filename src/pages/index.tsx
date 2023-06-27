@@ -10,16 +10,16 @@ const elos = ['IRON', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND'];
 const ranks = ['IV', 'III', 'II', 'I'];
 
 const playersInfo = [
-  { title: 'GOAT', skin: 'Riven_5', name: 'KSCERATO' },
-  { title: '', skin: 'Thresh_1', name: 'Ghigho' },
-  { title: 'Horrível', skin: 'Zed_1', name: 'dakarou' },
+  { title: 'Vagabundo', skin: 'Riven_5', name: 'KSCERATO' },
+  { title: 'Reserva do Paulinho', skin: 'Thresh_1', name: 'Ghigho' },
+  { title: 'Pescoçudo', skin: 'Zed_1', name: 'dakarou' },
   { title: 'Gold mais forte', skin: 'Irelia_5', name: 'seyrin' },
   { title: 'Aposentado', skin: 'Darius_3', name: 'Ja Fui Bom 1 Dia' },
   { title: 'Soul silver', skin: 'Lillia_19', name: 'hicky1' },
   { title: 'Nordestino', skin: 'Fiora_50', name: 'bocchi the loser' },
-  { title: '', skin: 'Ornn_0', name: 'fastfortresz' },
-  { title: '', skin: 'Nasus_5', name: 'thigu' },
-  { title: '', skin: 'Samira_20', name: 'mijo na cama' },
+  { title: 'Diferencial na rota superior', skin: 'Ornn_0', name: 'fastfortresz' },
+  { title: 'Ex diamante 1', skin: 'Nasus_5', name: 'thigu' },
+  { title: 'Pereba', skin: 'Samira_20', name: 'mijo na cama' },
 ];
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -67,7 +67,7 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       players,
     },
-    revalidate: 2400,
+    revalidate: 1200,
   };
 };
 
@@ -123,10 +123,10 @@ export default function Home({ players }: { players: Player[] }) {
                       height={72}
                       width={72}
                     />
-                    <div>
+                    <span>
                       {player.league.tier} {player.league.rank}{' '}
                       {player.league.leaguePoints} PDL
-                    </div>
+                    </span>
                     <p className="text-xs">
                       {player.league.wins} vitórias - {player.league.losses} derrotas
                     </p>

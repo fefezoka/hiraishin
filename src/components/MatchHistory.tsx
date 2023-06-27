@@ -7,6 +7,7 @@ const spells = {
   3: 'Exhaust',
   4: 'Flash',
   6: 'Haste',
+  7: 'Heal',
   11: 'Smite',
   12: 'Teleport',
   14: 'Dot',
@@ -18,7 +19,7 @@ export const MatchHistory = ({ player }: { player: Player }) => {
   const { data } = trpc.matchHistory.useQuery({ puuid: player.puuid });
 
   return (
-    <div className="h-full py-2 border-b">
+    <div className="h-full py-2 border-b divide-y divide-slate-600">
       {data ? (
         data.map((match, index) => {
           const summoner = match.info.participants.find(
@@ -27,7 +28,7 @@ export const MatchHistory = ({ player }: { player: Player }) => {
 
           return (
             <div key={index}>
-              <div className="flex justify-between md:px-[24px] mt-2 items-center">
+              <div className="flex justify-between md:px-[24px] py-2 items-center">
                 <div className="flex gap-0.5">
                   <div className="relative">
                     <Image
@@ -68,7 +69,7 @@ export const MatchHistory = ({ player }: { player: Player }) => {
                     {new Intl.DateTimeFormat('pt-BR', {
                       minute: '2-digit',
                       second: '2-digit',
-                    }).format(match.info.matchDuration)}
+                    }).format(match.info.gameDuration * 1000)}
                   </span>
                 </div>
                 <div className="flex flex-col text-xs items-center">
@@ -101,23 +102,32 @@ export const MatchHistory = ({ player }: { player: Player }) => {
                     </div>
                   ))}
                 </div>
-                <div className="grid grid-cols-2 w-[230px]">
-                  {match.info.participants.map((participant: any) => (
-                    <div key={participant.puuid} className="flex gap-1">
-                      <Image
-                        data-player={participant.summonerName === player.name}
-                        src={`http://ddragon.leagueoflegends.com/cdn/13.12.1/img/champion/${participant.championName}.png`}
-                        alt=""
-                        height={14}
-                        width={14}
-                        className="data-[player=true]:border data-[player=true]:border-orange-400 data-[player=true]:rounded-full"
-                      />
-                      <span
-                        data-player={participant.summonerName === player.name}
-                        className={'text-xxxs data-[player=true]:font-bold'}
-                      >
-                        {participant.summonerName}
-                      </span>
+                <div className="flex gap-1">
+                  {[
+                    match.info.participants.slice(0, 5),
+                    match.info.participants.slice(5, 10),
+                  ].map((team, index) => (
+                    <div key={index} className="w-[100px]">
+                      {team.map((participant: any) => (
+                        <div key={participant.puuid} className="flex flex-gol ">
+                          <Image
+                            data-player={participant.summonerName === player.name}
+                            src={`http://ddragon.leagueoflegends.com/cdn/13.12.1/img/champion/${participant.championName}.png`}
+                            alt=""
+                            height={14}
+                            width={14}
+                            className="data-[player=true]:border data-[player=true]:border-orange-400 data-[player=true]:rounded-full"
+                          />
+                          <span
+                            data-player={participant.summonerName === player.name}
+                            className={
+                              'text-xxxs data-[player=true]:font-bold text-ellipsis whitespace-nowrap overflow-hidden'
+                            }
+                          >
+                            {participant.summonerName}
+                          </span>
+                        </div>
+                      ))}
                     </div>
                   ))}
                 </div>
