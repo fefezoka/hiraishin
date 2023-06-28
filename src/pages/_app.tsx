@@ -18,6 +18,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           url: 'https://hiraishin.vercel.app',
           type: 'website',
         }}
+        twitter={{ cardType: 'summary_large_image' }}
       />
       <Component {...pageProps} />
     </main>

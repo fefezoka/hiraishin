@@ -31,4 +31,5 @@
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(to bottom right, rgb(30, 27, 75), #020617);
+  min-height: 100vh;
 }

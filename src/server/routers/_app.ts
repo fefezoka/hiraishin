@@ -1,14 +1,7 @@
 import { z } from 'zod';
 import { procedure, router } from '../trpc';
 import axios from '../../service/axios';
-import { playersInfo } from '../../pages';
-
-const tiers = [
-  { en: 'GOLD', pt: 'OURO' },
-  { en: 'PLATINUM', pt: 'PLATINA' },
-  { en: 'DIAMOND', pt: 'DIAMANTE' },
-];
-const ranks = ['IV', 'III', 'II', 'I'];
+import { playersInfo, ranks, tiers } from '../../commons/data';
 
 export const appRouter = router({
   players: procedure.query(async () => {
