@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import axios from '../service/axios';
 import * as Collapsible from '@radix-ui/react-collapsible';
 import { MatchHistory } from '@components';
@@ -26,7 +26,7 @@ const playersInfo = [
   { title: 'Pereba', skin: 'Samira_20', name: 'mijo na cama' },
 ];
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const players = await Promise.all<Player>(
     playersInfo.map(async (info) => {
       const player = await axios
@@ -71,7 +71,6 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       players,
     },
-    revalidate: 600,
   };
 };
 
@@ -91,13 +90,10 @@ export default function Home({ players }: { players: Player[] }) {
             onInit={(typewritter) => {
               typewritter
                 .typeString('UM CLÃ.')
-                .pauseFor(400)
                 .deleteAll()
                 .typeString('UMA GUILDA.')
-                .pauseFor(400)
                 .deleteAll()
                 .typeString('UMA TRIBO.')
-                .pauseFor(400)
                 .deleteAll()
                 .typeString('UMA FAMÍLIA.')
                 .start();
