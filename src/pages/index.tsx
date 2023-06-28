@@ -4,6 +4,7 @@ import axios from '../service/axios';
 import * as Collapsible from '@radix-ui/react-collapsible';
 import { MatchHistory } from '@components';
 import Link from 'next/link';
+import Typewritter from 'typewriter-effect';
 
 const tiers = [
   { en: 'GOLD', pt: 'OURO' },
@@ -16,12 +17,12 @@ const playersInfo = [
   { title: 'Vagabundo', skin: 'Riven_5', name: 'KSCERATO' },
   { title: 'Reserva do Paulinho', skin: 'Thresh_1', name: 'Ghigho' },
   { title: 'Hokage', skin: 'Zed_1', name: 'dakarou' },
-  { title: 'Gold mais forte', skin: 'Irelia_5', name: 'seyrin' },
+  { title: 'Gold mais forte', skin: 'Xayah_37', name: 'seyrin' },
   { title: 'Aposentado', skin: 'Darius_3', name: 'Ja Fui Bom 1 Dia' },
   { title: 'Soul silver', skin: 'Lillia_19', name: 'hicky1' },
   { title: 'Nordestino', skin: 'Fiora_31', name: 'bocchi the loser' },
   { title: 'Diferencial na rota superior', skin: 'Ornn_0', name: 'fastfortresz' },
-  { title: 'Ex diamante 1', skin: 'Nasus_5', name: 'thigu' },
+  { title: 'Ex diamante 1', skin: 'Riven_16', name: 'thigu' },
   { title: 'Pereba', skin: 'Samira_20', name: 'mijo na cama' },
 ];
 
@@ -70,7 +71,7 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       players,
     },
-    revalidate: 1200,
+    revalidate: 600,
   };
 };
 
@@ -83,7 +84,25 @@ export default function Home({ players }: { players: Player[] }) {
     <main className="bg-gradient-to-br from-indigo-950 to-slate-950">
       <div className="max-w-[768px] m-auto pt-6">
         <h1 className="text-center text-6xl my-3 font-bold text-transparent w-fit m-auto bg-clip-text bg-gradient-to-r from-slate-100 to-slate-400">
-          TRIBO HIRAISHIN
+          <Typewritter
+            options={{
+              wrapperClassName: 'before:content-["HIRAISHIN,_"]',
+            }}
+            onInit={(typewritter) => {
+              typewritter
+                .typeString('UM CLÃ.')
+                .pauseFor(400)
+                .deleteAll()
+                .typeString('UMA GUILDA.')
+                .pauseFor(400)
+                .deleteAll()
+                .typeString('UMA TRIBO.')
+                .pauseFor(400)
+                .deleteAll()
+                .typeString('UMA FAMÍLIA.')
+                .start();
+            }}
+          />
         </h1>
         <div className="md:grid md:grid-cols-[.9fr_1.3fr_.8fr] md:px-[64px] py-2 px-5 text-sm md:text-lg">
           <div className="hidden md:block">Posição</div>
