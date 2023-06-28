@@ -1,6 +1,6 @@
 import React from 'react';
-import { trpc } from '../utils/trpc';
 import Image from 'next/image';
+import { trpc } from '../utils/trpc';
 
 const spells = {
   1: 'Boost',
