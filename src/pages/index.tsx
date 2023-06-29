@@ -42,7 +42,7 @@ export default function Home() {
   return (
     <>
       {!isLoading && !isRefetching ? (
-        <div className="max-w-[768px] m-auto py-6">
+        <div className="max-w-[768px] m-auto px-3 py-6">
           <h1 className="text-center text-5xl md:text-6xl mt-5 mb-6 font-bold text-transparent w-fit m-auto bg-clip-text bg-gradient-to-r from-slate-100 to-slate-400">
             HIRAISHIN
             <Typewritter
@@ -68,13 +68,14 @@ export default function Home() {
           </div>
 
           {players && (
-            <div className="border-white border-[1px] divide-y bg-indigo-950">
+            <div className="border-slate-300 divide-slate-300 border-[1px] divide-y bg-indigo-950">
               {players.map((player, index) => (
                 <Collapsible.Root key={player.id}>
                   <Collapsible.CollapsibleTrigger asChild>
-                    <div className="md:px-[64px] px-5 py-4 cursor-pointer flex items-center overflow-hidden justify-between text-sm md:text-lg relative z-10">
-                      <div className="absolute top-0 md:-top-14 left-0 right-0 bottom-0 bg-black opacity-40 -z-10 overflow-hidden">
+                    <div className="md:px-[64px] px-3 py-5 cursor-pointer flex items-center overflow-hidden justify-between text-sm md:text-lg relative z-10">
+                      <div className="absolute top-0 md:-top-12 left-0 right-0 bottom-0 bg-black opacity-40 -z-10 overflow-hidden">
                         <Image
+                          draggable={false}
                           src={`https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${player.skin}.jpg`}
                           alt=""
                           width={1215}
@@ -88,18 +89,18 @@ export default function Home() {
                           (index + 1 < previousRanking[player.name] ? (
                             <MdOutlineKeyboardDoubleArrowUp
                               className="text-green-500"
-                              size={22}
+                              size={24}
                             />
                           ) : (
                             <MdOutlineKeyboardDoubleArrowDown
                               className="text-red-500"
-                              size={22}
+                              size={24}
                             />
                           ))}
                       </div>
                       <div className="flex items-center gap-2 md:gap-4 w-[284px]">
                         <div className="border-2 border-orange-400 relative">
-                          <div className="w-[64px] h-[64px] md:w-[72px] md:h-[72px]">
+                          <div className="w-[60px] h-[60px] md:w-[72px] md:h-[72px]">
                             <Image
                               src={`http://ddragon.leagueoflegends.com/cdn/13.12.1/img/profileicon/${player.profileIconId}.png`}
                               alt=""
@@ -124,17 +125,18 @@ export default function Home() {
                       </div>
 
                       <div className="flex flex-col justify-center items-center md:min-w-[172px] shrink-0">
-                        <Image
-                          src={`https://opgg-static.akamaized.net/images/medals_new/${player.league.tier.toLowerCase()}.png?image=q_auto,f_webp,w_144&v=1687738763941`}
-                          alt=""
-                          height={72}
-                          width={72}
-                        />
+                        <div className="w-[64px] h-[64px] md:w-[72px] md:h-[72px] relative">
+                          <Image
+                            src={`https://opgg-static.akamaized.net/images/medals_new/${player.league.tier.toLowerCase()}.png?image=q_auto,f_webp,w_144&v=1687738763941`}
+                            alt=""
+                            fill
+                          />
+                        </div>
                         <span>
                           {tiers.find((tier) => tier.en === player.league.tier)?.pt}{' '}
                           {player.league.rank} {player.league.leaguePoints} PDL
                         </span>
-                        <p className="text-xs">
+                        <p className="text-xxs md:text-xs">
                           {player.league.wins}V {player.league.losses}D -{' '}
                           {(
                             (player.league.wins /

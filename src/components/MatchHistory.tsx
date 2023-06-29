@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { trpc } from '../utils/trpc';
+import Link from 'next/link';
 
 const spells = {
   1: 'Boost',
@@ -23,12 +24,12 @@ export const MatchHistory = ({ player }: { player: Player }) => {
       {data ? (
         data.map((match, index) => {
           const summoner = match.info.participants.find(
-            (participant: any) => participant.summonerName === player.name
+            (participant) => participant.summonerName === player.name
           )!;
 
           return (
             <div key={index}>
-              <div className="flex justify-between px-4 md:px-6 py-2 items-center">
+              <div className="flex justify-between px-4 md:px-6 py-2 items-center text-xs">
                 <div className="flex gap-0.5">
                   <div className="relative">
                     <Image
@@ -56,7 +57,7 @@ export const MatchHistory = ({ player }: { player: Player }) => {
                     ))}
                   </div>
                 </div>
-                <div className="flex flex-col items-center text-sm">
+                <div className="flex flex-col items-center">
                   <span className="font-bold">Ranqueada Solo</span>
                   <span
                     data-remake={summoner.gameEndedInEarlySurrender}
@@ -117,7 +118,7 @@ export const MatchHistory = ({ player }: { player: Player }) => {
                     match.info.participants.slice(5, 10),
                   ].map((team, index) => (
                     <div key={index} className="w-[100px]">
-                      {team.map((participant: any) => (
+                      {team.map((participant) => (
                         <div key={participant.puuid} className="flex gap-1 items-center">
                           <Image
                             data-player={participant.summonerName === player.name}
@@ -127,14 +128,20 @@ export const MatchHistory = ({ player }: { player: Player }) => {
                             width={14}
                             className="data-[player=true]:border data-[player=true]:border-orange-400 data-[player=true]:rounded-full"
                           />
-                          <span
-                            data-player={participant.summonerName === player.name}
-                            className={
-                              'text-xxxs data-[player=true]:font-bold text-ellipsis whitespace-nowrap overflow-hidden'
-                            }
+                          <Link
+                            href={`https://u.gg/lol/profile/br1/${participant.summonerName}/overview`}
+                            target="_blank"
+                            className="text-ellipsis whitespace-nowrap overflow-hidden"
                           >
-                            {participant.summonerName}
-                          </span>
+                            <span
+                              data-player={participant.summonerName === player.name}
+                              className={
+                                'text-xxxs data-[player=true]:font-bold hover:underline'
+                              }
+                            >
+                              {participant.summonerName}
+                            </span>
+                          </Link>
                         </div>
                       ))}
                     </div>
@@ -146,7 +153,7 @@ export const MatchHistory = ({ player }: { player: Player }) => {
         })
       ) : (
         <div className="text-center my-4">
-          <span>Carregando...</span>
+          <span>Carregando histórico de partidas...</span>
         </div>
       )}
     </div>

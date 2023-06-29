@@ -16,7 +16,7 @@ interface League {
   rank: string;
   wins: number;
   losses: number;
-  queueType: 'RANKED_SOLO_5x5';
+  queueType: 'RANKED_SOLO_5x5' | 'RANKED_FLEX_5x5';
   summonerId: string;
   leaguePoints: number;
 }
@@ -29,6 +29,7 @@ interface Match {
   info: {
     gameDuration: number;
     participants: {
+      puuid: string;
       summonerName: string;
       champLevel: number;
       summoner1Id: number;
