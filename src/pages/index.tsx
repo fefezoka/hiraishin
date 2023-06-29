@@ -84,19 +84,21 @@ export default function Home() {
                       </div>
                       <div className="min-w-[26px] flex gap-2 items-center absolute top-3 left-1/2 md:relative md:top-auto md:left-auto">
                         <span className="font-bold">{index + 1} º</span>
-                        {previousRanking?.[player.name] &&
-                          index + 1 !== previousRanking[player.name] &&
-                          (index + 1 < previousRanking[player.name] ? (
-                            <MdOutlineKeyboardDoubleArrowUp
-                              className="text-green-500"
-                              size={24}
-                            />
-                          ) : (
-                            <MdOutlineKeyboardDoubleArrowDown
-                              className="text-red-500"
-                              size={24}
-                            />
-                          ))}
+                        <div className="md:absolute md:top-0 md:-right-7">
+                          {previousRanking?.[player.name] &&
+                            index + 1 !== previousRanking[player.name] &&
+                            (index + 1 < previousRanking[player.name] ? (
+                              <MdOutlineKeyboardDoubleArrowUp
+                                className="text-green-500"
+                                size={'1.5em'}
+                              />
+                            ) : (
+                              <MdOutlineKeyboardDoubleArrowDown
+                                className="text-red-500"
+                                size={'1.5em'}
+                              />
+                            ))}
+                        </div>
                       </div>
                       <div className="flex items-center gap-2 md:gap-4 w-[284px]">
                         <div className="border-2 border-orange-400 relative">
@@ -115,6 +117,7 @@ export default function Home() {
                           <Link
                             href={`https://u.gg/lol/profile/br1/${player.name}/overview`}
                             target="_blank"
+                            onClick={(e) => e.stopPropagation()}
                           >
                             <h1 className="w-fit hover:underline">{player.name}</h1>
                           </Link>
@@ -138,10 +141,10 @@ export default function Home() {
                         </span>
                         <p className="text-xxs md:text-xs">
                           {player.league.wins}V {player.league.losses}D -{' '}
-                          {(
+                          {Math.ceil(
                             (player.league.wins /
                               (player.league.wins + player.league.losses)) *
-                            100
+                              100
                           ).toFixed(0)}
                           % Winrate
                         </p>

@@ -16,4 +16,5 @@ export const tiers = [
   { en: 'PLATINUM', pt: 'PLATINA' },
   { en: 'DIAMOND', pt: 'DIAMANTE' },
 ];
+
 export const ranks = ['IV', 'III', 'II', 'I'];
