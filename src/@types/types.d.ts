@@ -4,11 +4,13 @@ interface Player {
   name: string;
   puuid: string;
   profileIconId: number;
-  league: League;
+  leagues: League[];
   masteries: Mastery[];
   title: string;
   skin: string;
 }
+
+type Queue = 'RANKED_SOLO_5x5' | 'RANKED_FLEX_SR';
 
 interface League {
   summonerName: string;
@@ -16,9 +18,10 @@ interface League {
   rank: string;
   wins: number;
   losses: number;
-  queueType: 'RANKED_SOLO_5x5' | 'RANKED_FLEX_5x5';
+  queueType: Queue;
   summonerId: string;
   leaguePoints: number;
+  index: number;
 }
 
 interface Mastery {

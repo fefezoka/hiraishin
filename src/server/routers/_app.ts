@@ -7,43 +7,59 @@ export const appRouter = router({
   players: procedure.query(async () => {
     return await Promise.all<Player>(
       playersInfo.map(async (info) => {
-        const player = await axios
-          .get(
-            `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${info.name}`
-          )
-          .then((response) => response.data);
+        const { data: player } = await axios.get(
+          `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${info.name}`
+        );
 
-        const league = await axios
-          .get(
-            `https://br1.api.riotgames.com/lol/league/v4/entries/by-summoner/${player.id}`
-          )
-          .then((response: any) =>
-            response.data.find((league: League) => league.queueType === 'RANKED_SOLO_5x5')
-          );
+        const { data: leagues } = await axios.get<League[]>(
+          `https://br1.api.riotgames.com/lol/league/v4/entries/by-summoner/${player.id}`
+        );
 
-        return { ...info, ...player, league };
+        return {
+          ...info,
+          ...player,
+          leagues: leagues.sort((a) => (a.queueType === 'RANKED_SOLO_5x5' ? -1 : 1)),
+        };
       })
-    ).then((response) =>
-      response.sort((a, b) => {
-        const higherElo =
-          tiers.findIndex((tier) => tier.en === b.league.tier) -
-          tiers.findIndex((tier) => tier.en === a.league.tier);
+    ).then((players) => {
+      const leagueRanking = ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'].map(
+        (_, index) =>
+          players
+            .filter((player) => player.leagues[index])
+            .sort((a, b) => {
+              const higherElo =
+                tiers.findIndex((tier) => tier.en === b.leagues[index].tier) -
+                tiers.findIndex((tier) => tier.en === a.leagues[index].tier);
 
-        const higherRank =
-          ranks.findIndex((rank) => rank === b.league.rank) -
-          ranks.findIndex((rank) => rank === a.league.rank);
+              const higherRank =
+                ranks.findIndex((rank) => rank === b.leagues[index].rank) -
+                ranks.findIndex((rank) => rank === a.leagues[index].rank);
 
-        if (higherElo !== 0) {
-          return higherElo;
-        }
+              if (higherElo !== 0) {
+                return higherElo;
+              }
 
-        if (higherRank !== 0) {
-          return higherRank;
-        }
+              if (higherRank !== 0) {
+                return higherRank;
+              }
 
-        return b.league.leaguePoints - a.league.leaguePoints;
-      })
-    );
+              return b.leagues[index].leaguePoints - a.leagues[index].leaguePoints;
+            })
+            .reduce(
+              (acc, curr, idx) => Object.assign(acc, { [curr.name]: idx + 1 }, {}),
+              {}
+            ) as Record<string, number>
+      );
+
+      return players.map((player) => {
+        return {
+          ...player,
+          leagues: player.leagues.map((league, index) => {
+            return { ...league, index: leagueRanking[index][player.name] };
+          }),
+        };
+      });
+    });
   }),
   matchHistory: procedure
     .input(
