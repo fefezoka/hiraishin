@@ -17,7 +17,7 @@ export const MatchHistory = ({ player, queue }: IMatchHistory) => {
       {data ? (
         data.map((match, index) => {
           const summoner = match.info.participants.find(
-            (participant) => participant.summonerName === player.name
+            (participant) => participant.puuid === player.puuid
           )!;
 
           return (

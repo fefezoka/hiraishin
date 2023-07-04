@@ -10,7 +10,7 @@ interface Player {
   skin: string;
 }
 
-type Queue = 'RANKED_SOLO_5x5' | 'RANKED_FLEX_SR';
+type Queue = 'RANKED_SOLO_5x5' | 'RANKED_FLEX_SR' | 'RANKED_TFT_DOUBLE_UP';
 
 interface League {
   summonerName: string;
