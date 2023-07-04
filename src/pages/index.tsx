@@ -208,7 +208,10 @@ export default function Home() {
                                 </div>
                               </Collapsible.CollapsibleTrigger>
                               <Collapsible.CollapsibleContent>
-                                <MatchHistory player={player} />
+                                <MatchHistory
+                                  player={player}
+                                  queue={queueType === 'RANKED_SOLO_5x5' ? '420' : '440'}
+                                />
                               </Collapsible.CollapsibleContent>
                             </Collapsible.Root>
                           );

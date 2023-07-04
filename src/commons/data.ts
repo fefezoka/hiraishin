@@ -3,7 +3,7 @@ import { david } from '@assets';
 export const playersInfo = [
   { title: 'Vagabundo', skin: 'Lux_7', name: 'KSCERATO' },
   { title: 'Reserva do Paulinho', skin: 'Thresh_1', name: 'Ghigho' },
-  { title: 'Horrível', skin: david.src, name: 'dakarou' }, // Zed_1
+  { title: 'Horrível', skin: david.src, name: 'daka1' }, // Zed_1
   { title: 'Gold mais forte', skin: 'Xayah_37', name: 'seyrin' },
   { title: 'Aposentado', skin: 'Darius_3', name: 'Ja Fui Bom 1 Dia' },
   { title: 'Soul silver', skin: 'Lillia_19', name: 'hicky1' },

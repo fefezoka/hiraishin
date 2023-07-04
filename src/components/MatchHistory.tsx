@@ -4,8 +4,13 @@ import { trpc } from '../utils/trpc';
 import Link from 'next/link';
 import { spells } from '../commons/data';
 
-export const MatchHistory = ({ player }: { player: Player }) => {
-  const { data } = trpc.matchHistory.useQuery({ puuid: player.puuid });
+interface IMatchHistory {
+  player: Player;
+  queue: '420' | '440';
+}
+
+export const MatchHistory = ({ player, queue }: IMatchHistory) => {
+  const { data } = trpc.matchHistory.useQuery({ puuid: player.puuid, queue });
 
   return (
     <div className="h-full flex flex-col gap-2 divide-y py-2 bg-indigo-950 rounded-2xl mb-2 p-2">

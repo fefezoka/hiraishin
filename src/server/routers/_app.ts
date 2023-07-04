@@ -65,12 +65,13 @@ export const appRouter = router({
     .input(
       z.object({
         puuid: z.string(),
+        queue: z.enum(['420', '440']),
       })
     )
     .query(async ({ input }) => {
       return await axios
         .get<string[]>(
-          `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${input.puuid}/ids?start=0&queue=420&count=5`
+          `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${input.puuid}/ids?start=0&queue=${input.queue}&count=5`
         )
         .then(
           async (response) =>
