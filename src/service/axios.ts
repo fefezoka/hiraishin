@@ -1,11 +1,6 @@
 import { default as instance } from 'axios';
 
-const axios = instance.create({
-  headers: {
-    'Access-Control-Allow-Origin': '*',
-    'X-RIOT-TOKEN': process.env.RIOT_API_KEY,
-  },
-});
+const axios = instance.create();
 
 axios.interceptors.request.use((config) => {
   config.headers['X-RIOT-TOKEN'] = process.env.RIOT_API_KEY;

@@ -32,6 +32,7 @@ export const MatchHistory = ({ player, queue }: IMatchHistory) => {
                     alt=""
                     height={48}
                     width={48}
+                    unoptimized
                   />
                   <span className="absolute left-0 bottom-0 text-xxs bg-black">
                     {summoner.champLevel}
@@ -94,13 +95,14 @@ export const MatchHistory = ({ player, queue }: IMatchHistory) => {
                 }).map((item, index) => (
                   <div
                     key={index}
-                    className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] relative bg-indigo-900"
+                    className="w-[20px] h-[20px] md:w-[24px] md:h-[24px] relative bg-indigo-900 rounded overflow-hidden"
                   >
                     {item !== 0 && (
                       <Image
                         src={`http://ddragon.leagueoflegends.com/cdn/13.12.1/img/item/${item}.png`}
                         alt=""
                         fill
+                        unoptimized
                       />
                     )}
                   </div>
@@ -120,6 +122,7 @@ export const MatchHistory = ({ player, queue }: IMatchHistory) => {
                           alt=""
                           height={14}
                           width={14}
+                          unoptimized
                           className="data-[player=true]:border data-[player=true]:border-orange-400 data-[player=true]:rounded-full"
                         />
                         <Link
