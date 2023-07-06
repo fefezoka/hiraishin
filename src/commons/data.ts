@@ -1,7 +1,7 @@
 import { david } from '@assets';
 
 export const playersInfo = [
-  { title: 'Vagabundo', skin: 'Lux_7', name: 'KSCERATO' },
+  { title: 'Vagabundo', skin: 'Lux_7', name: 'nayeon pereira' },
   { title: 'Reserva do Paulinho', skin: 'Thresh_1', name: 'Ghigho' },
   { title: 'Horrível', skin: david.src, name: 'daka1' }, // Zed_1
   { title: 'Gold mais forte', skin: 'Xayah_37', name: 'seyrin' },

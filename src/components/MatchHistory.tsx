@@ -32,7 +32,6 @@ export const MatchHistory = ({ player, queue }: IMatchHistory) => {
                     alt=""
                     height={48}
                     width={48}
-                    unoptimized
                   />
                   <span className="absolute left-0 bottom-0 text-xxs bg-black">
                     {summoner.champLevel}
@@ -102,7 +101,6 @@ export const MatchHistory = ({ player, queue }: IMatchHistory) => {
                         src={`http://ddragon.leagueoflegends.com/cdn/13.12.1/img/item/${item}.png`}
                         alt=""
                         fill
-                        unoptimized
                       />
                     )}
                   </div>
@@ -122,7 +120,6 @@ export const MatchHistory = ({ player, queue }: IMatchHistory) => {
                           alt=""
                           height={14}
                           width={14}
-                          unoptimized
                           className="data-[player=true]:border data-[player=true]:border-orange-400 data-[player=true]:rounded-full"
                         />
                         <Link

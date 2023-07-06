@@ -133,7 +133,6 @@ export default function Home() {
                                       alt=""
                                       width={1215}
                                       height={717}
-                                      unoptimized
                                     />
                                   </div>
                                   <div className="min-w-[26px] flex gap-2 items-center absolute top-3 left-1/2 md:relative md:top-auto md:left-auto">
@@ -163,7 +162,6 @@ export default function Home() {
                                           src={`http://ddragon.leagueoflegends.com/cdn/13.12.1/img/profileicon/${player.profileIconId}.png`}
                                           alt=""
                                           fill
-                                          unoptimized
                                         />
                                       </div>
                                       <span className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 text-xxs bg-black  py-0.5 px-1.5 rounded-md">
@@ -192,7 +190,6 @@ export default function Home() {
                                         src={`https://opgg-static.akamaized.net/images/medals_new/${league.tier.toLowerCase()}.png?image=q_auto,f_webp,w_144&v=1687738763941`}
                                         alt=""
                                         fill
-                                        unoptimized
                                       />
                                     </div>
                                     <span>
