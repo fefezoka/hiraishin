@@ -7,10 +7,10 @@ export const playersInfo = [
   { title: 'Gold mais forte', skin: 'Xayah_37', name: 'seyrin' },
   { title: 'Aposentado', skin: 'Darius_3', name: 'Ja Fui Bom 1 Dia' },
   { title: 'Soul silver', skin: 'Lillia_19', name: 'hicky1' },
-  { title: 'Nordestino', skin: 'Fiora_69', name: 'bocchi the loser' },
+  { title: 'Nordestino', skin: 'Fiora_69', name: 'lrys' },
   { title: 'Diferencial na rota superior', skin: 'Sett_19', name: 'fastfortresz' },
   { title: 'Ex diamante 1', skin: 'Riven_16', name: 'thigu' },
-  { title: 'Pereba', skin: 'Samira_20', name: 'mijo na cama' },
+  { title: 'Pereba', skin: 'Samira_20', name: 'let it happn' },
 ];
 
 export const tiers = [
