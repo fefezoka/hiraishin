@@ -19,7 +19,11 @@ export const appRouter = router({
           ...info,
           ...player,
           leagues: leagues
-            .filter((league) => league.queueType !== 'RANKED_TFT_DOUBLE_UP')
+            .filter(
+              (league) =>
+                league.queueType === 'RANKED_FLEX_SR' ||
+                league.queueType === 'RANKED_SOLO_5x5'
+            )
             .sort((a) => (a.queueType === 'RANKED_SOLO_5x5' ? -1 : 1)),
         };
       })
