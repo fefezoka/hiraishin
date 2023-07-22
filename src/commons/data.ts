@@ -16,6 +16,7 @@ export const playersInfo = [
 export const tiers = [
   { en: 'GOLD', pt: 'OURO' },
   { en: 'PLATINUM', pt: 'PLATINA' },
+  { en: 'EMERALD', pt: 'ESMERALDA' },
   { en: 'DIAMOND', pt: 'DIAMANTE' },
 ];
 
