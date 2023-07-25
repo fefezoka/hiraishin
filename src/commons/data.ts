@@ -51,11 +51,6 @@ export const playersInfo = [
     skin: 'Samira_20',
     accountId: 'YK9pet125SQXFCM-wys_zHWFQDfpCUaTxXuM0MZoopTx0lQ',
   },
-  {
-    title: 'Random',
-    skin: 'Garen_10',
-    accountId: 'C100wnKkCEYZirb4VTJZuYksp-GpcSQsWqUachYaVs1aCfQ',
-  },
 ];
 
 export const tiers = [
