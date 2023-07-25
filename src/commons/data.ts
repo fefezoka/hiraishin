@@ -1,16 +1,61 @@
 import { david } from '@assets';
 
 export const playersInfo = [
-  { title: 'Vagabundo', skin: 'Lux_7', name: 'nayeon pereira' },
-  { title: 'Reserva do Paulinho', skin: 'Thresh_1', name: 'Ghigho' },
-  { title: 'Horrível', skin: david.src, name: 'daka1' }, // Zed_1
-  { title: 'Gold mais forte', skin: 'Xayah_37', name: 'seyrin' },
-  { title: 'Aposentado', skin: 'Darius_3', name: 'Ja Fui Bom 1 Dia' },
-  { title: 'Soul silver', skin: 'Lillia_19', name: 'hicky1' },
-  { title: 'Nordestino', skin: 'Fiora_69', name: 'lrys' },
-  { title: 'Diferencial na rota superior', skin: 'Sett_19', name: 'fastfortresz' },
-  { title: 'Ex diamante 1', skin: 'Riven_16', name: 'thigu' },
-  { title: 'Pereba', skin: 'Samira_20', name: 'let it happn' },
+  {
+    title: 'Vagabundo',
+    skin: 'Lux_7',
+    accountId: 'ovsOjxRte-djtQ8ySz5uIHsjRWiaydkzHmerVntxv_C4MgQ',
+  },
+  {
+    title: 'Reserva do Paulinho',
+    skin: 'Thresh_1',
+    accountId: 'AXDxv0H6XL6pBxgut-TeGvE-Z3t6OqaZALlJ7tca-RxUIX8',
+  },
+  {
+    title: 'Horrível',
+    skin: david.src,
+    accountId: 'ZeawlYZuKOUZdh4mxJqS2HAAr1qp9CNXDdpHvAzLnIcUr8I',
+  }, // Zed_1
+  {
+    title: 'Gold mais forte',
+    skin: 'Xayah_37',
+    accountId: 'Qp-XkXVrAisdSU6FgC9nirEyjmM6YJisvLr-xnEfJufGwJU',
+  },
+  {
+    title: 'Aposentado',
+    skin: 'Darius_3',
+    accountId: 'eKH48pVRyyWjGRbyK02riejBGVWxp0mh8dLItMuP4eS2BMI',
+  },
+  {
+    title: 'Soul silver',
+    skin: 'Lillia_19',
+    accountId: '6gdO7gMq6fGUR2WRxXJPL1ykfGe1VMjhTqToT339NUMF0IQ',
+  },
+  {
+    title: 'Nordestino',
+    skin: 'Fiora_69',
+    accountId: 'uHXnDgtj6_YFtY1xRMuAiKM3FHsJ7Cq965ZMIg9PUxC0xuw',
+  },
+  {
+    title: 'Diferencial na rota superior',
+    skin: 'Sett_19',
+    accountId: '9kf4-Y7z_ni7Zy7kD0vfi31kYlJ9tJJiTu0dNDlDrIeIn9Y',
+  },
+  {
+    title: 'Ex diamante 1',
+    skin: 'Riven_16',
+    accountId: 'rJeuUzDYBSxjhVMmC2213xHcqdIf6tarmWGlubQna8N_2bY',
+  },
+  {
+    title: 'Pereba',
+    skin: 'Samira_20',
+    accountId: 'YK9pet125SQXFCM-wys_zHWFQDfpCUaTxXuM0MZoopTx0lQ',
+  },
+  {
+    title: 'Random',
+    skin: 'Garen_10',
+    accountId: 'C100wnKkCEYZirb4VTJZuYksp-GpcSQsWqUachYaVs1aCfQ',
+  },
 ];
 
 export const tiers = [

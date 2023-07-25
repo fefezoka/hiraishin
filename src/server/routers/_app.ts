@@ -8,7 +8,7 @@ export const appRouter = router({
     return await Promise.all<Player>(
       playersInfo.map(async (info) => {
         const { data: player } = await axios.get(
-          `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${info.name}`
+          `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-account/${info.accountId}`
         );
 
         const { data: leagues } = await axios.get<League[]>(
