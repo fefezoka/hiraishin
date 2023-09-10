@@ -33,12 +33,12 @@ export const playersInfo = [
   },
   {
     title: 'Nordestino',
-    skin: 'Fiora_69',
+    skin: 'Gwen_11',
     accountId: 'uHXnDgtj6_YFtY1xRMuAiKM3FHsJ7Cq965ZMIg9PUxC0xuw',
   },
   {
-    title: 'Diferencial na rota superior',
-    skin: 'Sett_19',
+    title: 'Heart gold',
+    skin: 'Sett_45',
     accountId: '9kf4-Y7z_ni7Zy7kD0vfi31kYlJ9tJJiTu0dNDlDrIeIn9Y',
   },
   {

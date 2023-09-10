@@ -28,7 +28,7 @@ export const MatchHistory = ({ player, queue }: IMatchHistory) => {
               <div className="flex gap-0.5">
                 <div className="relative">
                   <Image
-                    src={`http://ddragon.leagueoflegends.com/cdn/13.12.1/img/champion/${summoner.championName}.png`}
+                    src={`http://ddragon.leagueoflegends.com/cdn/13.17.1/img/champion/${summoner.championName}.png`}
                     alt=""
                     height={48}
                     width={48}

@@ -159,7 +159,7 @@ export default function Home() {
                                     <div className="border-2 border-orange-400 relative">
                                       <div className="w-[60px] h-[60px] md:w-[72px] md:h-[72px]">
                                         <Image
-                                          src={`http://ddragon.leagueoflegends.com/cdn/13.14.1/img/profileicon/${player.profileIconId}.png`}
+                                          src={`http://ddragon.leagueoflegends.com/cdn/13.17.1/img/profileicon/${player.profileIconId}.png`}
                                           alt=""
                                           fill
                                         />
