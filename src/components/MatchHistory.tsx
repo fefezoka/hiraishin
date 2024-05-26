@@ -115,7 +115,7 @@ export const MatchHistory = ({ player, queue }: IMatchHistory) => {
                     {team.map((participant) => (
                       <div key={participant.puuid} className="flex gap-1 items-center">
                         <Image
-                          data-player={participant.summonerName === player.name}
+                          data-player={participant.puuid === player.puuid}
                           src={`http://ddragon.leagueoflegends.com/cdn/13.12.1/img/champion/${participant.championName}.png`}
                           alt=""
                           height={14}
@@ -123,12 +123,12 @@ export const MatchHistory = ({ player, queue }: IMatchHistory) => {
                           className="data-[player=true]:border data-[player=true]:border-orange-400 data-[player=true]:rounded-full"
                         />
                         <Link
-                          href={`https://u.gg/lol/profile/br1/${participant.summonerName}/overview`}
+                          href={`https://u.gg/lol/profile/br1/${participant.riotIdGameName}-${participant.riotIdTagLine}/overview`}
                           target="_blank"
                           className="text-ellipsis whitespace-nowrap overflow-hidden"
                         >
                           <span
-                            data-player={participant.summonerName === player.name}
+                            data-player={participant.summonerName === player.gameName}
                             className={
                               'text-xxxs data-[player=true]:font-bold hover:underline'
                             }
