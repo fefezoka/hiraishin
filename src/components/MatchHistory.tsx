@@ -123,7 +123,7 @@ export const MatchHistory = ({ player, queue }: IMatchHistory) => {
                           className="data-[player=true]:border data-[player=true]:border-orange-400 data-[player=true]:rounded-full"
                         />
                         <Link
-                          href={`https://u.gg/lol/profile/br1/${participant.riotIdGameName}-${participant.riotIdTagLine}/overview`}
+                          href={`https://u.gg/lol/profile/br1/${participant.riotIdGameName}-${participant.riotIdTagline}/overview`}
                           target="_blank"
                           className="text-ellipsis whitespace-nowrap overflow-hidden"
                         >
@@ -133,7 +133,7 @@ export const MatchHistory = ({ player, queue }: IMatchHistory) => {
                               'text-xxxs data-[player=true]:font-bold hover:underline'
                             }
                           >
-                            {participant.summonerName}
+                            {participant.riotIdGameName} #{participant.riotIdTagline}
                           </span>
                         </Link>
                       </div>

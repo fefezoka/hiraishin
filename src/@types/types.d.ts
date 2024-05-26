@@ -46,7 +46,7 @@ interface Match {
       puuid: string;
       summonerName: string;
       riotIdGameName: string;
-      riotIdTagLine: string;
+      riotIdTagline: string;
       champLevel: number;
       summoner1Id: number;
       summoner2Id: number;
