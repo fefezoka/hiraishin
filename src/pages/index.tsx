@@ -33,7 +33,7 @@ export default function Home() {
               (acc, curr) =>
                 Object.assign(
                   acc,
-                  curr.leagues[index] && { [curr.name]: curr.leagues[index].index }
+                  curr.leagues[index] && { [curr.gameName]: curr.leagues[index].index }
                 ),
               {}
             )
@@ -136,13 +136,15 @@ export default function Home() {
                                     />
                                   </div>
                                   <div className="min-w-[26px] flex gap-2 items-center absolute top-3 left-1/2 md:relative md:top-auto md:left-auto">
-                                    <span className="font-bold">{index + 1} º</span>
+                                    <span className="font-semibold text-yellow-400">
+                                      #{index + 1}
+                                    </span>
                                     <div className="md:absolute md:top-0 md:-right-7">
-                                      {previousRanking?.[typeIndex]?.[player.name] &&
+                                      {previousRanking?.[typeIndex]?.[player.gameName] &&
                                         index + 1 !==
-                                          previousRanking[typeIndex][player.name] &&
+                                          previousRanking[typeIndex][player.gameName] &&
                                         (index + 1 <
-                                        previousRanking[typeIndex][player.name] ? (
+                                        previousRanking[typeIndex][player.gameName] ? (
                                           <MdOutlineKeyboardDoubleArrowUp
                                             className="text-green-500"
                                             size={'1.5em'}
@@ -159,7 +161,7 @@ export default function Home() {
                                     <div className="border-2 border-orange-400 relative">
                                       <div className="w-[60px] h-[60px] md:w-[72px] md:h-[72px]">
                                         <Image
-                                          src={`http://ddragon.leagueoflegends.com/cdn/13.24.1/img/profileicon/${player.profileIconId}.png`}
+                                          src={`http://ddragon.leagueoflegends.com/cdn/14.10.1/img/profileicon/${player.profileIconId}.png`}
                                           alt=""
                                           fill
                                         />
@@ -170,15 +172,21 @@ export default function Home() {
                                     </div>
                                     <div>
                                       <Link
-                                        href={`https://u.gg/lol/profile/br1/${player.name}/overview`}
+                                        className="hover:underline"
+                                        href={`https://u.gg/lol/profile/br1/${player.gameName}-${player.tagLine}/overview`}
                                         target="_blank"
                                         onClick={(e) => e.stopPropagation()}
                                       >
-                                        <h1 className="w-fit hover:underline">
-                                          {player.name}
-                                        </h1>
+                                        <div className="flex gap-1 items-end">
+                                          <h1 className="w-fit shrink-0">
+                                            {player.gameName}
+                                          </h1>
+                                          <h2 className="text-yellow-400 text-xs sm:text-base">
+                                            #{player.tagLine}
+                                          </h2>
+                                        </div>
                                       </Link>
-                                      <p className="text-yellow-400 font-bold text-xs">
+                                      <p className="text-yellow-400 font-semibold text-xs">
                                         {index === 0 ? 'Hokage' : player.title}
                                       </p>
                                     </div>

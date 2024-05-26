@@ -1,14 +1,18 @@
 import { z } from 'zod';
 import { procedure, router } from '../trpc';
 import axios from '../../service/axios';
-import { playersInfo, ranks, tiers } from '../../commons/data';
+import { players, ranks, tiers } from '../../commons/data';
 
 export const appRouter = router({
   players: procedure.query(async () => {
     return await Promise.all<Player>(
-      playersInfo.map(async (info) => {
-        const { data: player } = await axios.get(
+      players.map(async (info) => {
+        const { data: player } = await axios.get<SummonerDto>(
           `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-account/${info.accountId}`
+        );
+
+        const { data: account } = await axios.get<AccountDto>(
+          `https://americas.api.riotgames.com/riot/account/v1/accounts/by-puuid/${player.puuid}`
         );
 
         const { data: leagues } = await axios.get<League[]>(
@@ -18,6 +22,7 @@ export const appRouter = router({
         return {
           ...info,
           ...player,
+          ...account,
           leagues: leagues
             .filter(
               (league) =>
@@ -52,7 +57,7 @@ export const appRouter = router({
               return b.leagues[index].leaguePoints - a.leagues[index].leaguePoints;
             })
             .reduce(
-              (acc, curr, idx) => Object.assign(acc, { [curr.name]: idx + 1 }, {}),
+              (acc, curr, idx) => Object.assign(acc, { [curr.gameName]: idx + 1 }, {}),
               {}
             ) as Record<string, number>
       );
@@ -61,7 +66,7 @@ export const appRouter = router({
         return {
           ...player,
           leagues: player.leagues.map((league, index) => {
-            return { ...league, index: leagueRanking[index][player.name] };
+            return { ...league, index: leagueRanking[index][player.gameName] };
           }),
         };
       });

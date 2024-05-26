@@ -1,13 +1,28 @@
 interface Player {
   id: string;
   summonerLevel: number;
-  name: string;
+  gameName: string;
+  tagLine: string;
   puuid: string;
   profileIconId: number;
   leagues: League[];
-  masteries: Mastery[];
   title: string;
   skin: string;
+}
+
+interface SummonerDto {
+  accountId: string;
+  profileIconId: number;
+  revisionDate: number;
+  id: string;
+  puuid: string;
+  summonerLevel: number;
+}
+
+interface AccountDto {
+  puuid: string;
+  gameName: string;
+  tagLine: string;
 }
 
 type Queue = 'RANKED_SOLO_5x5' | 'RANKED_FLEX_SR' | 'RANKED_TFT_DOUBLE_UP';
@@ -22,10 +37,6 @@ interface League {
   summonerId: string;
   leaguePoints: number;
   index: number;
-}
-
-interface Mastery {
-  championName: string;
 }
 
 interface Match {
