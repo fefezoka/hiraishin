@@ -32,12 +32,12 @@ export const players = [
     accountId: '6gdO7gMq6fGUR2WRxXJPL1ykfGe1VMjhTqToT339NUMF0IQ',
   },
   {
-    title: 'Nordestino',
+    title: 'Superestimado',
     skin: 'Gwen_11',
     accountId: 'uHXnDgtj6_YFtY1xRMuAiKM3FHsJ7Cq965ZMIg9PUxC0xuw',
   },
   {
-    title: 'asd',
+    title: 'Narigudo',
     skin: 'Lucian_9',
     accountId: 'ETllTUNpgyOh8mJaT5Pavlf12Sz2YmevLVlymqqD8Uvbweg',
   },
