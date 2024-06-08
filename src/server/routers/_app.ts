@@ -11,9 +11,13 @@ export const appRouter = router({
           `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-account/${info.accountId}`
         );
 
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
         const { data: account } = await axios.get<AccountDto>(
           `https://americas.api.riotgames.com/riot/account/v1/accounts/by-puuid/${player.puuid}`
         );
+
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
         const { data: leagues } = await axios.get<League[]>(
           `https://br1.api.riotgames.com/lol/league/v4/entries/by-summoner/${player.id}`
