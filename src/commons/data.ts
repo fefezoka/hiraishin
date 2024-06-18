@@ -61,6 +61,11 @@ export const players = [
     skin: 'Zed_1',
     accountId: 'ywU6fzcE3IGBX4IzdvlBkWuxFcwk0XS-NSE4lyAuAQW80Hk',
   },
+  {
+    title: 'Smurf do superestimado',
+    skin: 'Fiora_0',
+    accountId: 'OLjvMJi7mCegkfCyYGpVo0t99R3jKzYQnWNQ44NsAPQKl0s8ERuQTdeg',
+  },
 ];
 
 export const tiers: { en: Tier; pt: string }[] = [
