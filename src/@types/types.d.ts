@@ -29,8 +29,8 @@ type Queue = 'RANKED_SOLO_5x5' | 'RANKED_FLEX_SR' | 'RANKED_TFT_DOUBLE_UP';
 
 interface League {
   summonerName: string;
-  tier: string;
-  rank: string;
+  tier: Tier;
+  rank: Rank;
   wins: number;
   losses: number;
   queueType: Queue;
@@ -68,3 +68,6 @@ interface Match {
     }[];
   };
 }
+
+type Tier = 'SILVER' | 'GOLD' | 'PLATINUM' | 'EMERALD' | 'DIAMOND' | 'MASTER';
+type Rank = 'IV' | 'III' | 'II' | 'I';

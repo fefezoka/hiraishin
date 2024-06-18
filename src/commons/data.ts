@@ -51,9 +51,19 @@ export const players = [
     skin: 'Samira_20',
     accountId: 'YK9pet125SQXFCM-wys_zHWFQDfpCUaTxXuM0MZoopTx0lQ',
   },
+  {
+    title: 'Smurf do narigudo',
+    skin: 'Ezreal_20',
+    accountId: 'RfyLcrT3zFwOTAFY8eP8SheNgeuCVhIdwY1CLpuJeLzvyEYyf4jpy-Qr',
+  },
+  {
+    title: 'Cheater',
+    skin: 'Zed_1',
+    accountId: 'ywU6fzcE3IGBX4IzdvlBkWuxFcwk0XS-NSE4lyAuAQW80Hk',
+  },
 ];
 
-export const tiers = [
+export const tiers: { en: Tier; pt: string }[] = [
   { en: 'SILVER', pt: 'PRATA' },
   { en: 'GOLD', pt: 'OURO' },
   { en: 'PLATINUM', pt: 'PLATINA' },
@@ -62,7 +72,7 @@ export const tiers = [
   { en: 'MASTER', pt: 'MESTRE' },
 ];
 
-export const ranks = ['IV', 'III', 'II', 'I'];
+export const ranks: Rank[] = ['IV', 'III', 'II', 'I'];
 
 export const spells = {
   1: 'Boost',

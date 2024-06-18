@@ -5,7 +5,7 @@ import * as Collapsible from '@radix-ui/react-collapsible';
 import * as Tabs from '@radix-ui/react-tabs';
 import Typewritter from 'typewriter-effect';
 import { trpc } from '../utils/trpc';
-import { tiers } from '../commons/data';
+import { ranks, tiers } from '../commons/data';
 import { IoMdRefresh } from 'react-icons/io';
 import { MatchHistory } from '@components';
 import {
@@ -14,9 +14,49 @@ import {
 } from 'react-icons/md';
 import { mpengu } from '@assets';
 
+type LeagueState = Record<
+  string,
+  {
+    index: number;
+    elo: Elo;
+  }
+>;
+
+type Elo = {
+  tier: Tier;
+  rank: Rank;
+  leaguePoints: number;
+};
+
 export default function Home() {
   const [queueType, setQueueType] = useState<Queue>('RANKED_SOLO_5x5');
-  const [previousRanking, setPreviousRanking] = useState<Record<string, number>[]>();
+  const [previousRanking, setPreviousRanking] = useState<LeagueState[]>();
+
+  const lpDiffBetween2Elos = (elo1: Elo, elo2: Elo) => {
+    const baseLeaguePoints = {
+      SILVER: 0,
+      GOLD: 400,
+      PLATINUM: 800,
+      EMERALD: 1200,
+      DIAMOND: 1600,
+      MASTER: 2000,
+    };
+
+    const getPDL = (tier: Tier, rank: Rank, leaguePoints: number) => {
+      if (!baseLeaguePoints.hasOwnProperty(tier) || !ranks.includes(rank)) {
+        return 0;
+      }
+
+      const tierPDL = baseLeaguePoints[tier];
+      const rankIndex = ranks.indexOf(rank);
+      return tierPDL + rankIndex * 100 + leaguePoints;
+    };
+
+    return (
+      getPDL(elo1.tier, elo1.rank, elo1.leaguePoints) -
+      getPDL(elo2.tier, elo2.rank, elo2.leaguePoints)
+    );
+  };
 
   const {
     data: players,
@@ -33,10 +73,19 @@ export default function Home() {
               (acc, curr) =>
                 Object.assign(
                   acc,
-                  curr.leagues[index] && { [curr.gameName]: curr.leagues[index].index }
+                  curr.leagues[index] && {
+                    [curr.gameName]: {
+                      index: curr.leagues[index].index,
+                      elo: {
+                        tier: curr.leagues[index].tier,
+                        rank: curr.leagues[index].rank,
+                        leaguePoints: curr.leagues[index].leaguePoints,
+                      },
+                    },
+                  }
                 ),
               {}
-            )
+            ) as LeagueState
           )
         );
       });
@@ -57,7 +106,7 @@ export default function Home() {
   return (
     <>
       {!isLoading && !isRefetching ? (
-        <div className="max-w-[768px] m-auto px-3 py-6">
+        <div className="max-w-[768px] font-medium m-auto px-3 py-6">
           <div className="relative">
             <h1 className="text-center text-5xl md:text-6xl mt-5 mb-4 font-bold text-transparent w-fit m-auto bg-clip-text bg-gradient-to-r from-slate-100 to-slate-400">
               HIRAISHIN
@@ -118,11 +167,24 @@ export default function Home() {
                             (league) => league.queueType === type
                           )!;
 
+                          const lpDiff =
+                            previousRanking?.[typeIndex]?.[player.gameName] &&
+                            lpDiffBetween2Elos(
+                              { ...player.leagues[typeIndex] },
+                              {
+                                ...previousRanking?.[typeIndex]?.[player.gameName].elo,
+                              }
+                            );
+
+                          const winrate = Math.ceil(
+                            (league.wins / (league.wins + league.losses)) * 100
+                          );
+
                           return (
                             <Collapsible.Root key={player.id}>
                               <Collapsible.CollapsibleTrigger asChild>
                                 <div className="md:px-[64px] mb-2 rounded-2xl px-3 py-6 cursor-pointer flex items-center overflow-hidden justify-between text-sm md:text-lg relative z-10">
-                                  <div className="absolute top-0 md:-top-12 left-0 right-0 bottom-0 bg-black opacity-[45%] -z-10 overflow-hidden">
+                                  <div className="absolute top-0 md:-top-12 left-0 right-0 bottom-0 bg-black opacity-[40%] -z-10 overflow-hidden">
                                     <Image
                                       draggable={false}
                                       src={
@@ -142,9 +204,11 @@ export default function Home() {
                                     <div className="md:absolute md:top-0 md:-right-7">
                                       {previousRanking?.[typeIndex]?.[player.gameName] &&
                                         index + 1 !==
-                                          previousRanking[typeIndex][player.gameName] &&
+                                          previousRanking[typeIndex][player.gameName]
+                                            .index &&
                                         (index + 1 <
-                                        previousRanking[typeIndex][player.gameName] ? (
+                                        previousRanking[typeIndex][player.gameName]
+                                          .index ? (
                                           <MdOutlineKeyboardDoubleArrowUp
                                             className="text-green-500"
                                             size={'1.5em'}
@@ -161,7 +225,7 @@ export default function Home() {
                                     <div className="border-2 border-orange-400 relative">
                                       <div className="w-[60px] h-[60px] md:w-[72px] md:h-[72px]">
                                         <Image
-                                          src={`http://ddragon.leagueoflegends.com/cdn/14.10.1/img/profileicon/${player.profileIconId}.png`}
+                                          src={`http://ddragon.leagueoflegends.com/cdn/14.12.1/img/profileicon/${player.profileIconId}.png`}
                                           alt=""
                                           fill
                                         />
@@ -177,7 +241,7 @@ export default function Home() {
                                         target="_blank"
                                         onClick={(e) => e.stopPropagation()}
                                       >
-                                        <div className="flex gap-1 items-end">
+                                        <div className="flex gap-1 items-baseline">
                                           <h1 className="w-fit shrink-0">
                                             {player.gameName}
                                           </h1>
@@ -192,7 +256,7 @@ export default function Home() {
                                     </div>
                                   </div>
 
-                                  <div className="flex flex-col justify-center items-center md:min-w-[172px] shrink-0">
+                                  <div className="flex relative flex-col justify-center items-center md:min-w-[172px] shrink-0">
                                     <div className="w-[64px] h-[64px] md:w-[72px] md:h-[72px] relative">
                                       <Image
                                         src={`https://opgg-static.akamaized.net/images/medals_new/${league.tier.toLowerCase()}.png?image=q_auto,f_webp,w_144&v=1687738763941`}
@@ -203,14 +267,37 @@ export default function Home() {
                                     <span>
                                       {tiers.find((tier) => tier.en === league.tier)?.pt}{' '}
                                       {league.rank} {league.leaguePoints} PDL
+                                      {lpDiff !== 0 && lpDiff !== undefined && (
+                                        <span className="absolute font-semibold flex text-sm -top-2 right-0">
+                                          {lpDiff > 0 ? (
+                                            <>
+                                              +{lpDiff} PDL
+                                              <MdOutlineKeyboardDoubleArrowUp
+                                                className="text-green-500"
+                                                size={'1.25rem'}
+                                              />
+                                            </>
+                                          ) : (
+                                            <>
+                                              {lpDiff} PDL
+                                              <MdOutlineKeyboardDoubleArrowDown
+                                                className="text-red-500"
+                                                size={'1.5em'}
+                                              />
+                                            </>
+                                          )}
+                                        </span>
+                                      )}
                                     </span>
-                                    <p className="text-xxs md:text-xs">
+                                    <p className="text-xxs  md:text-xs">
                                       {league.wins}V {league.losses}D -{' '}
-                                      {Math.ceil(
-                                        (league.wins / (league.wins + league.losses)) *
-                                          100
-                                      ).toFixed(0)}
-                                      % Winrate
+                                      <span
+                                        className={`data-[winrate-above-50='false']:text-red-500 ${
+                                          winrate > 50 && 'text-green-500'
+                                        } ${winrate < 50 && 'text-red-500'}`}
+                                      >
+                                        {winrate.toFixed(0)}% Winrate
+                                      </span>
                                     </p>
                                   </div>
                                 </div>

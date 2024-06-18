@@ -28,7 +28,7 @@ export const MatchHistory = ({ player, queue }: IMatchHistory) => {
               <div className="flex gap-0.5">
                 <div className="relative">
                   <Image
-                    src={`http://ddragon.leagueoflegends.com/cdn/13.17.1/img/champion/${summoner.championName}.png`}
+                    src={`http://ddragon.leagueoflegends.com/cdn/14.12.1/img/champion/${summoner.championName}.png`}
                     alt=""
                     height={48}
                     width={48}
@@ -44,7 +44,7 @@ export const MatchHistory = ({ player, queue }: IMatchHistory) => {
                   }).map((spell: number) => (
                     <Image
                       key={spell}
-                      src={`https://ddragon.leagueoflegends.com/cdn/13.12.1/img/spell/Summoner${spells[spell]}.png`}
+                      src={`https://ddragon.leagueoflegends.com/cdn/14.12.1/img/spell/Summoner${spells[spell]}.png`}
                       alt=""
                       height={24}
                       width={24}
@@ -98,7 +98,7 @@ export const MatchHistory = ({ player, queue }: IMatchHistory) => {
                   >
                     {item !== 0 && (
                       <Image
-                        src={`http://ddragon.leagueoflegends.com/cdn/13.12.1/img/item/${item}.png`}
+                        src={`http://ddragon.leagueoflegends.com/cdn/14.12.1/img/item/${item}.png`}
                         alt=""
                         fill
                       />
@@ -116,7 +116,7 @@ export const MatchHistory = ({ player, queue }: IMatchHistory) => {
                       <div key={participant.puuid} className="flex gap-1 items-center">
                         <Image
                           data-player={participant.puuid === player.puuid}
-                          src={`http://ddragon.leagueoflegends.com/cdn/13.12.1/img/champion/${participant.championName}.png`}
+                          src={`http://ddragon.leagueoflegends.com/cdn/14.12.1/img/champion/${participant.championName}.png`}
                           alt=""
                           height={14}
                           width={14}
