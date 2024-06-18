@@ -13,6 +13,7 @@ import {
   MdOutlineKeyboardDoubleArrowDown,
 } from 'react-icons/md';
 import { mpengu } from '@assets';
+import { getCookie, setCookie } from 'cookies-next';
 
 type LeagueState = Record<
   string,
@@ -66,7 +67,7 @@ export default function Home() {
   } = trpc.players.useQuery(undefined, {
     onSuccess: (data) => {
       Array<Queue>('RANKED_SOLO_5x5', 'RANKED_FLEX_SR').map((queueType, index) => {
-        window.localStorage.setItem(
+        setCookie(
           `hiraishin-${queueType}`,
           JSON.stringify(
             data.reduce(
@@ -93,12 +94,8 @@ export default function Home() {
   });
 
   useEffect(() => {
-    const previousSolo = JSON.parse(
-      window.localStorage.getItem('hiraishin-RANKED_SOLO_5x5') || '{}'
-    );
-    const previousFlex = JSON.parse(
-      window.localStorage.getItem('hiraishin-RANKED_FLEX_SR') || '{}'
-    );
+    const previousSolo = JSON.parse(getCookie('hiraishin-RANKED_SOLO_5x5') || '{}');
+    const previousFlex = JSON.parse(getCookie('hiraishin-RANKED_FLEX_SR') || '{}');
 
     previousSolo && previousFlex && setPreviousRanking([previousSolo, previousFlex]);
   }, []);
