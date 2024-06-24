@@ -5,7 +5,7 @@ import * as Collapsible from '@radix-ui/react-collapsible';
 import * as Tabs from '@radix-ui/react-tabs';
 import Typewritter from 'typewriter-effect';
 import { trpc } from '../utils/trpc';
-import { ranks, tiers } from '../commons/data';
+import { getPDL, tiers } from '../commons/data';
 import { IoMdRefresh } from 'react-icons/io';
 import { MatchHistory } from '@components';
 import {
@@ -15,49 +15,9 @@ import {
 import { mpengu } from '@assets';
 import { getCookie, setCookie } from 'cookies-next';
 
-type LeagueState = Record<
-  string,
-  {
-    index: number;
-    elo: Elo;
-  }
->;
-
-type Elo = {
-  tier: Tier;
-  rank: Rank;
-  leaguePoints: number;
-};
-
 export default function Home() {
   const [queueType, setQueueType] = useState<Queue>('RANKED_SOLO_5x5');
   const [previousRanking, setPreviousRanking] = useState<LeagueState[]>();
-
-  const lpDiffBetween2Elos = (elo1: Elo, elo2: Elo) => {
-    const baseLeaguePoints = {
-      SILVER: 0,
-      GOLD: 400,
-      PLATINUM: 800,
-      EMERALD: 1200,
-      DIAMOND: 1600,
-      MASTER: 2000,
-    };
-
-    const getPDL = (tier: Tier, rank: Rank, leaguePoints: number) => {
-      if (!baseLeaguePoints.hasOwnProperty(tier) || !ranks.includes(rank)) {
-        return 0;
-      }
-
-      const tierPDL = baseLeaguePoints[tier];
-      const rankIndex = ranks.indexOf(rank);
-      return tierPDL + rankIndex * 100 + leaguePoints;
-    };
-
-    return (
-      getPDL(elo1.tier, elo1.rank, elo1.leaguePoints) -
-      getPDL(elo2.tier, elo2.rank, elo2.leaguePoints)
-    );
-  };
 
   const {
     data: players,
@@ -74,16 +34,24 @@ export default function Home() {
               (acc, curr) =>
                 Object.assign(
                   acc,
-                  curr.leagues[index] && {
-                    [curr.gameName]: {
-                      index: curr.leagues[index].index,
-                      elo: {
-                        tier: curr.leagues[index].tier,
-                        rank: curr.leagues[index].rank,
-                        leaguePoints: curr.leagues[index].leaguePoints,
+                  (() => {
+                    const league = curr.leagues[index];
+
+                    if (!league) {
+                      return;
+                    }
+
+                    return {
+                      [curr.gameName]: {
+                        index: league.index,
+                        elo: {
+                          tier: league.tier,
+                          rank: league.rank,
+                          leaguePoints: league.leaguePoints,
+                        },
                       },
-                    },
-                  }
+                    };
+                  })()
                 ),
               {}
             ) as LeagueState
@@ -93,6 +61,8 @@ export default function Home() {
       });
     },
   });
+
+  console.log(players);
 
   useEffect(() => {
     const previousSolo = JSON.parse(getCookie('hiraishin-RANKED_SOLO_5x5') || '{}');
@@ -155,41 +125,19 @@ export default function Home() {
                   {['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'].map((type, typeIndex) => (
                     <Tabs.Content value={type} key={type}>
                       {players
-                        .sort((a, b) => {
-                          const leagueA = a.leagues.find(
-                            (league) => league.queueType === type
-                          );
-                          const leagueB = b.leagues.find(
-                            (league) => league.queueType === type
-                          );
-
-                          if (!leagueA) {
-                            return 1;
-                          }
-
-                          if (!leagueB) {
-                            return -1;
-                          }
-
-                          return leagueA.index - leagueB.index;
-                        })
+                        .filter((player) => player.leagues[typeIndex])
+                        .sort(
+                          (a, b) =>
+                            (a.leagues[typeIndex]?.index || 0) -
+                            (b.leagues[typeIndex]?.index || 0)
+                        )
                         .map((player, index) => {
-                          const league = player.leagues.find(
-                            (league) => league.queueType === type
-                          )!;
-
-                          if (!league) {
-                            return null;
-                          }
+                          const league = player.leagues[typeIndex]!;
 
                           const lpDiff =
                             previousRanking?.[typeIndex]?.[player.gameName] &&
-                            lpDiffBetween2Elos(
-                              { ...player.leagues[typeIndex] },
-                              {
-                                ...previousRanking?.[typeIndex]?.[player.gameName].elo,
-                              }
-                            );
+                            getPDL(player.leagues[typeIndex]) -
+                              getPDL(previousRanking?.[typeIndex]?.[player.gameName].elo);
 
                           const winrate = Math.ceil(
                             (league.wins / (league.wins + league.losses)) * 100

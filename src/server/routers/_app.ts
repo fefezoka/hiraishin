@@ -3,6 +3,25 @@ import { procedure, router } from '../trpc';
 import axios from '../../service/axios';
 import { players, ranks, tiers } from '../../commons/data';
 
+const baseLeaguePoints = {
+  SILVER: 0,
+  GOLD: 400,
+  PLATINUM: 800,
+  EMERALD: 1200,
+  DIAMOND: 1600,
+  MASTER: 2000,
+};
+
+const getPDL = (league: League) => {
+  if (!baseLeaguePoints.hasOwnProperty(league.tier) || !ranks.includes(league.rank)) {
+    return 0;
+  }
+
+  const tierPDL = baseLeaguePoints[league.tier];
+  const rankIndex = ranks.indexOf(league.rank);
+  return tierPDL + rankIndex * 100 + league.leaguePoints;
+};
+
 export const appRouter = router({
   players: procedure.query(async () => {
     return await Promise.all<Player>(
@@ -27,13 +46,19 @@ export const appRouter = router({
           ...info,
           ...player,
           ...account,
-          leagues: leagues
-            .filter(
-              (league) =>
-                league.queueType === 'RANKED_FLEX_SR' ||
-                league.queueType === 'RANKED_SOLO_5x5'
-            )
-            .sort((a) => (a.queueType === 'RANKED_SOLO_5x5' ? -1 : 1)),
+          leagues: [
+            leagues.find((league) => league?.queueType === 'RANKED_SOLO_5x5') || null,
+            leagues.find((league) => league?.queueType === 'RANKED_FLEX_SR') || null,
+          ].map((league) => {
+            if (!league) {
+              return league;
+            }
+
+            return {
+              ...league,
+              lp: getPDL(league),
+            };
+          }),
         };
       })
     ).then((players) => {
@@ -41,27 +66,19 @@ export const appRouter = router({
         (_, index) =>
           players
             .filter((player) => player.leagues[index])
-            .sort((a, b) => {
-              const higherElo =
-                tiers.findIndex((tier) => tier.en === b.leagues[index].tier) -
-                tiers.findIndex((tier) => tier.en === a.leagues[index].tier);
-
-              const higherRank =
-                ranks.findIndex((rank) => rank === b.leagues[index].rank) -
-                ranks.findIndex((rank) => rank === a.leagues[index].rank);
-
-              if (higherElo !== 0) {
-                return higherElo;
-              }
-
-              if (higherRank !== 0) {
-                return higherRank;
-              }
-
-              return b.leagues[index].leaguePoints - a.leagues[index].leaguePoints;
-            })
+            .sort((a, b) => getPDL(b.leagues[index]!) - getPDL(a.leagues[index]!))
             .reduce(
-              (acc, curr, idx) => Object.assign(acc, { [curr.gameName]: idx + 1 }, {}),
+              (acc, curr, idx) =>
+                Object.assign(
+                  acc,
+                  (() => {
+                    if (!curr.leagues[index]) {
+                      return;
+                    }
+                    return { [curr.gameName]: idx + 1 };
+                  })(),
+                  {}
+                ),
               {}
             ) as Record<string, number>
       );
@@ -70,6 +87,10 @@ export const appRouter = router({
         return {
           ...player,
           leagues: player.leagues.map((league, index) => {
+            if (!league) {
+              return null;
+            }
+
             return { ...league, index: leagueRanking[index][player.gameName] };
           }),
         };

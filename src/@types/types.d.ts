@@ -5,7 +5,7 @@ interface Player {
   tagLine: string;
   puuid: string;
   profileIconId: number;
-  leagues: League[];
+  leagues: (League | null)[];
   title: string;
   skin: string;
 }
@@ -27,17 +27,21 @@ interface AccountDto {
 
 type Queue = 'RANKED_SOLO_5x5' | 'RANKED_FLEX_SR' | 'RANKED_TFT_DOUBLE_UP';
 
-interface League {
+type League = {
   summonerName: string;
-  tier: Tier;
-  rank: Rank;
   wins: number;
   losses: number;
   queueType: Queue;
   summonerId: string;
   leaguePoints: number;
   index: number;
-}
+} & Elo;
+
+type Elo = {
+  leaguePoints: number;
+  tier: Tier;
+  rank: Rank;
+};
 
 interface Match {
   info: {
@@ -68,6 +72,14 @@ interface Match {
     }[];
   };
 }
+
+type LeagueState = Record<
+  string,
+  {
+    index: number;
+    elo: Elo;
+  }
+>;
 
 type Tier = 'SILVER' | 'GOLD' | 'PLATINUM' | 'EMERALD' | 'DIAMOND' | 'MASTER';
 type Rank = 'IV' | 'III' | 'II' | 'I';
