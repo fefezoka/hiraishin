@@ -2,18 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-*::-webkit-scrollbar {
-  width: 1rem;
-}
-
-*::-webkit-scrollbar-track {
-  background-color: rgb(28, 30, 64);
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: rgb(40, 42, 100);
-}
-
 body {
   color: rgb(235, 240, 255);
   background: linear-gradient(to bottom right, rgb(30, 27, 75), #020617);
