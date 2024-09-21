@@ -24,7 +24,7 @@ export default function Home() {
     isLoading,
     isRefetching,
     refetch,
-  } = trpc.players.useQuery(undefined, {
+  } = trpc.lolRouter.players.useQuery(undefined, {
     onSuccess: (data) => {
       Array<Queue>('RANKED_SOLO_5x5', 'RANKED_FLEX_SR').map((queueType, index) => {
         setCookie(
@@ -61,9 +61,9 @@ export default function Home() {
       });
     },
   });
-
+  const {data: teste} = trpc.fifaRouter.getSheetData.useQuery();
   console.log(players);
-
+  console.log(teste);
   useEffect(() => {
     const previousSolo = JSON.parse(getCookie('hiraishin-RANKED_SOLO_5x5') || '{}');
     const previousFlex = JSON.parse(getCookie('hiraishin-RANKED_FLEX_SR') || '{}');

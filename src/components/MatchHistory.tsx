@@ -10,7 +10,7 @@ interface IMatchHistory {
 }
 
 export const MatchHistory = ({ player, queue }: IMatchHistory) => {
-  const { data } = trpc.matchHistory.useQuery({ puuid: player.puuid, queue });
+  const { data } = trpc.lolRouter.matchHistory.useQuery({ puuid: player.puuid, queue });
 
   return (
     <div className="h-full flex flex-col gap-2 divide-y py-2 bg-indigo-950 rounded-2xl mb-2 p-2">
