@@ -5,6 +5,7 @@ import { Poppins } from 'next/font/google';
 import { hiraishin } from '@/assets';
 import { DefaultSeo } from 'next-seo';
 import Typewritter from 'typewriter-effect';
+import Link from 'next/link';
 
 const poppins = Poppins({ weight: ['400', '500', '600', '700'], subsets: ['latin'] });
 
@@ -21,22 +22,25 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         }}
         twitter={{ cardType: 'summary_large_image' }}
       />
-      <h1 className="text-center text-5xl md:text-6xl mt-5 mb-4 font-bold text-transparent w-fit m-auto bg-clip-text bg-gradient-to-r from-slate-100 to-slate-400">
-        HIRAISHIN
-        <Typewritter
-          onInit={(typewritter) => {
-            typewritter
-              .typeString('UM CLÃ')
-              .deleteAll()
-              .typeString('UMA TRIBO')
-              .deleteAll()
-              .typeString('UMA NAÇÃO')
-              .deleteAll()
-              .typeString('UMA FAMÍLIA.')
-              .start();
-          }}
-        />
-      </h1>
+      <Link href={'/'}>
+        <h1 className="text-center text-5xl md:text-6xl mt-6 mb-4 font-bold text-transparent w-fit m-auto bg-clip-text bg-gradient-to-r from-slate-100 to-slate-400">
+          HIRAISHIN
+          <Typewritter
+            onInit={(typewritter) => {
+              typewritter
+                .typeString('UM CLÃ')
+                .deleteAll()
+                .typeString('UMA TRIBO')
+                .deleteAll()
+                .typeString('UMA NAÇÃO')
+                .deleteAll()
+                .typeString('UMA FAMÍLIA.')
+                .start();
+            }}
+          />
+        </h1>
+      </Link>
+
       <Component {...pageProps} />
     </main>
   );

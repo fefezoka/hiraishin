@@ -1,40 +1,49 @@
-import { gragasCaipira } from '@/assets';
+import { gragasCaipira, nicolasJackson } from '@/assets';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="max-w-[768px] font-medium m-auto px-3 py-6">
-      <div className="grid grid-cols-3 gap-2 relative">
-        <Link href={'/lol'}>
-          <div className="w-full h-44 relative">
+    <div className="max-w-[792px] font-medium m-auto px-3 py-6">
+      <div className="flex flex-col gap-2 relative">
+        <div className="w-full h-40 relative">
+          <Link href={'/lol'}>
             <Image
               src={gragasCaipira.src}
               alt=""
-              className="h-full w-full opacity-50 rounded-lg overflow-hidden"
-              width={52}
-              height={52}
+              className="h-full object-cover object-top w-full opacity-50 rounded-lg overflow-hidden"
+              fill
             ></Image>
-            <h2 className="absolute top-0 m-2 left-0">League of Legends</h2>
-          </div>
-        </Link>
-        <div className="w-full h-44">
-          <Image
-            src={gragasCaipira.src}
-            alt=""
-            className="h-full w-full"
-            width={52}
-            height={52}
-          ></Image>
+            <h2 className="text-lg absolute flex h-full w-full items-center justify-center top-0 left-0">
+              League of Legends
+            </h2>
+          </Link>
         </div>
-        <div className="w-full h-44">
-          <Image
-            src={gragasCaipira.src}
-            alt=""
-            className="h-full w-full"
-            width={52}
-            height={52}
-          ></Image>
+        <div className="w-full h-40 relative">
+          <Link href={'/fifa'}>
+            <Image
+              src={nicolasJackson.src}
+              alt=""
+              className="w-full h-full opacity-50 rounded-lg overflow-hidden"
+              fill
+            ></Image>
+            <h2 className="text-lg absolute flex h-full w-full items-center justify-center top-0 left-0">
+              FIFA
+            </h2>
+          </Link>
+        </div>
+        <div className="w-full h-40 relative">
+          <Link href={'/osu'}>
+            <Image
+              src={gragasCaipira.src}
+              alt=""
+              className="object-cover w-full opacity-50 rounded-lg overflow-hidden"
+              fill
+            ></Image>
+            <h2 className="text-lg absolute flex h-full w-full items-center justify-center top-0 left-0">
+              osu EM BREVE
+            </h2>
+          </Link>
         </div>
       </div>
     </div>

@@ -73,7 +73,7 @@ export default function Home() {
   }
 
   return (
-    <div className="max-w-[768px] font-medium m-auto px-3 py-6">
+    <div className="max-w-[792px] font-medium m-auto px-3 py-6">
       <div className="relative">
         <Tabs.Root
           onValueChange={(value) => setQueueType(value as Queue)}
