@@ -1,6 +1,6 @@
 import { router } from '../trpc';
-import { lolRouter } from './lol'; 
-import { fifaRouter } from './sheetsFifa';
+import { lolRouter } from './lol';
+import { fifaRouter } from './sheets-fifa';
 
 export const appRouter = router({
   lolRouter,

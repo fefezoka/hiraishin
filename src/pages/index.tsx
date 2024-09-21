@@ -61,8 +61,7 @@ export default function Home() {
       });
     },
   });
-  const {data: teste} = trpc.fifaRouter.getSheetData.useQuery();
-  console.log(players);
+  const { data: teste } = trpc.fifaRouter.getSheetData.useQuery();
   console.log(teste);
   useEffect(() => {
     const previousSolo = JSON.parse(getCookie('hiraishin-RANKED_SOLO_5x5') || '{}');
