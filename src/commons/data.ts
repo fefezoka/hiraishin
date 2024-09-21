@@ -1,4 +1,4 @@
-import { david } from '@assets';
+import { david } from '@/assets';
 
 export const players = [
   {

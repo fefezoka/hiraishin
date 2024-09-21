@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { procedure, router } from '../trpc';
-import axios from '../../service/axios';
-import { players, ranks, tiers } from '../../commons/data';
+import { procedure, router } from '@/server/trpc';
+import axios from '@/service/axios';
+import { players, ranks } from '@/commons/data';
 
 const baseLeaguePoints = {
   SILVER: 0,

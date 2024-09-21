@@ -1,8 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
-import { trpc } from '../utils/trpc';
+import { trpc } from '@/utils/trpc';
 import Link from 'next/link';
-import { spells } from '../commons/data';
+import { spells } from '@/commons/data';
 
 interface IMatchHistory {
   player: Player;

@@ -1,1 +1,0 @@
-export { MatchHistory } from './MatchHistory';
