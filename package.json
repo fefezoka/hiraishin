@@ -24,6 +24,8 @@
     "cookies-next": "^4.2.1",
     "eslint": "8.43.0",
     "eslint-config-next": "13.4.7",
+    "google-auth-library": "^9.14.1",
+    "google-spreadsheet": "^4.1.4",
     "next": "13.4.7",
     "next-seo": "^6.1.0",
     "postcss": "8.4.24",
