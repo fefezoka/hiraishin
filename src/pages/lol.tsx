@@ -74,13 +74,13 @@ export default function Home() {
   }
 
   return (
-    <div className="max-w-[774px] font-medium m-auto px-3 py-6">
+    <div className="max-w-[774px] bg-[rgb(26,27,54)] rounded-lg font-medium m-auto px-5 py-4">
       <div className="relative">
         <Tabs.Root
           onValueChange={(value) => setQueueType(value as Queue)}
           defaultValue={queueType}
         >
-          <Tabs.List className="flex mb-2 items-center gap-3 justify-center">
+          <Tabs.List className="flex mb-2.5 items-center gap-3 justify-center">
             <Tabs.Trigger value="RANKED_SOLO_5x5" asChild>
               <button
                 data-selected={queueType === 'RANKED_SOLO_5x5'}

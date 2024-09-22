@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@radix-ui/react-collapsible": "^1.0.3",
+    "@radix-ui/react-popover": "^1.1.1",
     "@radix-ui/react-tabs": "^1.0.4",
     "@tanstack/react-query": "^4.29.17",
     "@trpc/client": "^10.32.0",
@@ -21,11 +22,14 @@
     "@types/react-dom": "18.2.6",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
     "cookies-next": "^4.2.1",
     "eslint": "8.43.0",
     "eslint-config-next": "13.4.7",
     "google-auth-library": "^9.14.1",
     "google-spreadsheet": "^4.1.4",
+    "lucide-react": "^0.445.0",
     "next": "13.4.7",
     "next-seo": "^6.1.0",
     "postcss": "8.4.24",
@@ -34,7 +38,9 @@
     "react-icons": "^4.10.1",
     "sharp": "^0.32.1",
     "superjson": "^1.12.4",
+    "tailwind-merge": "^2.5.2",
     "tailwindcss": "3.3.2",
+    "tailwindcss-animate": "^1.0.7",
     "zod": "^3.21.4"
   },
   "devDependencies": {

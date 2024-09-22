@@ -3,5 +3,6 @@ import hiraishin from './hiraishin.png';
 import david from './david.jpg';
 import gragasCaipira from './gragas-caipira.webp';
 import nicolasJackson from './nicolas-jackson.jpg';
+import escalacao from './jumentus-escalacao.png';
 
-export { mpengu, hiraishin, david, gragasCaipira, nicolasJackson };
+export { mpengu, hiraishin, david, gragasCaipira, nicolasJackson, escalacao };
