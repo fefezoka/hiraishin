@@ -70,7 +70,9 @@ const PlayerPopover = ({
     <Popover>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
       <PopoverContent className="w-fit">
-        <div className="text-center text-lg font-bold mb-2">{player['NAME']}</div>
+        <div className="text-center text-lg font-bold pb-1 mb-3 border-b-input border-b-2">
+          {player['NAME']}
+        </div>
         <div className="space-y-2 text-sm">
           {Object.entries(player)
             .slice(1)
