@@ -4,7 +4,7 @@ import Link from 'next/link';
 import * as Collapsible from '@radix-ui/react-collapsible';
 import * as Tabs from '@radix-ui/react-tabs';
 import { trpc } from '@/utils/trpc';
-import { getPDL, tiers } from '@/commons/data';
+import { tiers } from '@/commons/lol-data';
 import { IoMdRefresh } from 'react-icons/io';
 import { MatchHistory } from '@/components/league-of-legends/match-history';
 import {
@@ -13,6 +13,7 @@ import {
 } from 'react-icons/md';
 import { getCookie, setCookie } from 'cookies-next';
 import { Loading } from '@/components/loading';
+import { getPDL } from '@/utils/league-of-legends/get-pdl';
 
 export default function Home() {
   const [queueType, setQueueType] = useState<Queue>('RANKED_SOLO_5x5');
@@ -73,7 +74,7 @@ export default function Home() {
   }
 
   return (
-    <div className="max-w-[792px] font-medium m-auto px-3 py-6">
+    <div className="max-w-[774px] font-medium m-auto px-3 py-6">
       <div className="relative">
         <Tabs.Root
           onValueChange={(value) => setQueueType(value as Queue)}

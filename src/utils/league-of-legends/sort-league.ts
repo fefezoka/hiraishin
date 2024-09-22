@@ -1,4 +1,4 @@
-import { ranks, tiers } from '@/commons/data';
+import { ranks, tiers } from '@/commons/lol-data';
 
 interface SortPlayer extends Omit<Player, 'flex' | 'solo'> {
   flex: League;

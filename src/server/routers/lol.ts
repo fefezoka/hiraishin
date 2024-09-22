@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { procedure, router } from '../trpc';
 import axios from '../../service/axios';
-import { players, ranks, tiers } from '../../commons/data';
+import { players, ranks } from '@/commons/lol-data';
 
 const baseLeaguePoints = {
   SILVER: 0,
@@ -127,4 +127,3 @@ export const lolRouter = router({
     }),
 });
 // export type definition of API
-

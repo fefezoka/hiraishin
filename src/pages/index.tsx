@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="max-w-[792px] font-medium m-auto px-3 py-6">
+    <div className="max-w-[774px] font-medium m-auto px-3 py-6">
       <div className="flex flex-col gap-2 relative">
         <div className="w-full h-40 relative">
           <Link href={'/lol'}>
@@ -29,19 +29,6 @@ export default function Home() {
             ></Image>
             <h2 className="text-lg absolute flex h-full w-full items-center justify-center top-0 left-0">
               FIFA
-            </h2>
-          </Link>
-        </div>
-        <div className="w-full h-40 relative">
-          <Link href={'/osu'}>
-            <Image
-              src={gragasCaipira.src}
-              alt=""
-              className="object-cover w-full opacity-50 rounded-lg overflow-hidden"
-              fill
-            ></Image>
-            <h2 className="text-lg absolute flex h-full w-full items-center justify-center top-0 left-0">
-              osu EM BREVE
             </h2>
           </Link>
         </div>
