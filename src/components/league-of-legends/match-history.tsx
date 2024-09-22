@@ -1,8 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
-import { trpc } from '../utils/trpc';
+import { trpc } from '@/utils/trpc';
 import Link from 'next/link';
-import { spells } from '../commons/data';
+import { spells } from '@/commons/lol-data';
 
 interface IMatchHistory {
   player: Player;
@@ -10,7 +10,7 @@ interface IMatchHistory {
 }
 
 export const MatchHistory = ({ player, queue }: IMatchHistory) => {
-  const { data } = trpc.matchHistory.useQuery({ puuid: player.puuid, queue });
+  const { data } = trpc.lolRouter.matchHistory.useQuery({ puuid: player.puuid, queue });
 
   return (
     <div className="h-full flex flex-col gap-2 divide-y py-2 bg-indigo-950 rounded-2xl mb-2 p-2">
