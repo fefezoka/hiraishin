@@ -1,10 +1,14 @@
-import { escalacao } from '@/assets';
+import { escalacao, spinner } from '@/assets';
+import { actions, players } from '@/commons/fifa-data';
 import { Loading } from '@/components/loading';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { useUpdateCell } from '@/hooks/fifa';
 import { trpc } from '@/utils/trpc';
 import Image from 'next/image';
 import React, { ReactNode } from 'react';
+import { MdCheck } from 'react-icons/md';
+import { useDebouncedCallback } from 'use-debounce';
 
 export default function Fifa() {
   const { data: players, isLoading } = trpc.fifaRouter.getSheetData.useQuery();
@@ -63,7 +67,7 @@ const PlayerPopover = ({
   player,
   children,
 }: {
-  player: Record<string, string>;
+  player: Record<string, number | string>;
   children: ReactNode;
 }) => {
   return (
@@ -78,15 +82,71 @@ const PlayerPopover = ({
             .slice(1)
             .map(([key, value]) => (
               <div
-                className="grid grid-cols-2 gap-x-2 items-center justify-between"
+                className="grid grid-cols-2 gap-x-3 items-center justify-between"
                 key={key}
               >
-                <div className="shrink-0">{key}</div>
-                <Input type="number" defaultValue={value} />
+                <div className=" text-right shrink-0">{key}</div>
+                <CellInput
+                  action={key}
+                  player={player['NAME'] as string}
+                  value={value as number}
+                />
               </div>
             ))}
         </div>
       </PopoverContent>
     </Popover>
+  );
+};
+
+interface CellInputProps {
+  player: string;
+  action: string;
+  value: number;
+}
+
+const CellInput = ({ action, player, value }: CellInputProps) => {
+  const updateCell = useUpdateCell();
+
+  const debounced = useDebouncedCallback(
+    (
+      player: (typeof players)[number],
+      action: (typeof actions)[number],
+      value: number
+    ) => {
+      const playerIndex = players.findIndex((name) => name === player);
+      const actionIndex = actions.findIndex((name) => name === action);
+
+      updateCell.mutateAsync({
+        column: playerIndex + 1,
+        row: actionIndex + 1,
+        value,
+      });
+    },
+    1000
+  );
+
+  return (
+    <div className="flex gap-4 items-center">
+      <Input
+        onBlur={() => {
+          if (updateCell.isSuccess) {
+            updateCell.reset();
+          }
+        }}
+        className="max-w-[144px]"
+        onChange={(e) => {
+          const value = +e.target.value;
+
+          if (isNaN(value)) return;
+
+          debounced(player as (typeof players)[number], action, value);
+        }}
+        type="number"
+        defaultValue={value}
+      />
+      {updateCell.isLoading && <Image src={spinner} alt="" height={24} width={24} />}
+      {updateCell.isSuccess && <MdCheck className="h-[22px] w-[22px] text-green-500" />}
+    </div>
   );
 };

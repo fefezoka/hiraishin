@@ -47,19 +47,19 @@ export const fifaRouter = router({
           })()
         ),
       {}
-    ) as Record<(typeof players)[number], Record<string, string>>;
+    ) as Record<(typeof players)[number], Record<string, number | string>>;
 
     return formattedData;
   }),
   updateSheetData: procedure
-  .input(
-    z.object
-    ({ 
-      value: z.string(),
-      column: z.number(),
-      row: z.number() 
-    }))
-    .query(async ({ input }) => {
+    .input(
+      z.object({
+        value: z.number(),
+        column: z.number(),
+        row: z.number(),
+      })
+    )
+    .mutation(async ({ input }) => {
       const serviceAccountAuth = new JWT({
         key: process.env.GOOGLE_PRIVATE_KEY!.replace(/\\n/g, '\n'),
         email: process.env.GOOGLE_EMAIL,
@@ -77,14 +77,11 @@ export const fifaRouter = router({
       await doc.loadInfo();
 
       const sheet = doc.sheetsByIndex[0];
-      
 
       await sheet.loadCells('A1:I7');
-      const a1 = sheet.getCell(input.row, input.column);
-      a1.value = input.value;
+      const cell = sheet.getCell(input.row, input.column);
+      cell.value = input.value;
       await sheet.saveUpdatedCells();
-      return a1.value;
+      return cell.value;
     }),
 });
-
-
