@@ -126,4 +126,3 @@ export const lolRouter = router({
         );
     }),
 });
-// export type definition of API

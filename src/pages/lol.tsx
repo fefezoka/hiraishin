@@ -74,13 +74,13 @@ export default function Home() {
   }
 
   return (
-    <div className="max-w-[774px] font-medium m-auto px-3 py-6">
+    <div className="max-w-[774px] bg-[rgb(26,27,54)] rounded-lg font-medium m-auto px-5 py-4">
       <div className="relative">
         <Tabs.Root
           onValueChange={(value) => setQueueType(value as Queue)}
           defaultValue={queueType}
         >
-          <Tabs.List className="flex mb-2 items-center gap-3 justify-center">
+          <Tabs.List className="flex mb-2.5 items-center gap-3 justify-center">
             <Tabs.Trigger value="RANKED_SOLO_5x5" asChild>
               <button
                 data-selected={queueType === 'RANKED_SOLO_5x5'}
@@ -129,7 +129,7 @@ export default function Home() {
                       return (
                         <Collapsible.Root key={player.id}>
                           <Collapsible.CollapsibleTrigger asChild>
-                            <div className="md:px-[64px] mb-2 rounded-2xl px-3 py-6 cursor-pointer flex items-center overflow-hidden justify-between text-sm md:text-base relative z-10">
+                            <div className="md:px-[64px] mb-2 rounded-lg px-3 py-6 cursor-pointer flex items-center overflow-hidden justify-between text-sm md:text-base relative z-10">
                               <div className="absolute top-0 md:-top-12 left-0 right-0 bottom-0 bg-black opacity-[40%] -z-10 overflow-hidden">
                                 <Image
                                   draggable={false}
