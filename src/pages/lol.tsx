@@ -74,7 +74,7 @@ export default function Home() {
   }
 
   return (
-    <div className="max-w-[774px] bg-[rgb(26,27,54)] rounded-lg font-medium m-auto px-5 py-4">
+    <div className="max-w-[774px] font-medium m-auto px-3">
       <div className="relative">
         <Tabs.Root
           onValueChange={(value) => setQueueType(value as Queue)}
@@ -84,7 +84,7 @@ export default function Home() {
             <Tabs.Trigger value="RANKED_SOLO_5x5" asChild>
               <button
                 data-selected={queueType === 'RANKED_SOLO_5x5'}
-                className="py-2 text-sm px-2 text-slate-300 border-b-2 border-slate-500 data-[selected=true]:font-bold data-[selected=true]:border-slate-300 transition-all w-[140px]"
+                className="py-2 text-sm px-2 text-muted-foreground border-b-2 border-muted-foreground data-[selected=true]:font-bold data-[selected=true]:border-slate-300 data-[selected=true]:text-slate-300 transition-all w-[140px]"
               >
                 Ranqueada Solo
               </button>
@@ -92,14 +92,14 @@ export default function Home() {
             <Tabs.Trigger value="RANKED_FLEX_SR" asChild>
               <button
                 data-selected={queueType === 'RANKED_FLEX_SR'}
-                className="py-2 text-sm px-2 text-slate-300 border-b-2 border-slate-500 data-[selected=true]:font-bold data-[selected=true]:border-slate-300 transition-all w-[140px]"
+                className="py-2 text-sm px-2 text-muted-foreground border-b-2 border-muted-foreground data-[selected=true]:font-bold data-[selected=true]:border-slate-300 data-[selected=true]:text-slate-300 transition-all w-[140px]"
               >
                 Ranqueada Flex
               </button>
             </Tabs.Trigger>
             <IoMdRefresh
               size={24}
-              className="cursor-pointer text-slate-300 absolute right-0"
+              className="cursor-pointer text-muted-foreground absolute right-0"
               onClick={() => refetch()}
             />
           </Tabs.List>

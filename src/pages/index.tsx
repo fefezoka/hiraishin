@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="max-w-[774px] font-medium m-auto px-3 py-6">
+    <div className="max-w-[774px] font-medium m-auto px-3">
       <div className="flex flex-col gap-2 relative">
         <div className="w-full h-40 relative">
           <Link href={'/lol'}>
