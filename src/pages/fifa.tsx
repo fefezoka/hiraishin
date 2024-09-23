@@ -22,7 +22,7 @@ export default function Fifa() {
   }
 
   return (
-    <div className="max-w-[774px] font-medium m-auto px-3 py-6">
+    <div className="max-w-[774px] font-medium m-auto px-3">
       <div className="relative inline-block">
         <Image className="hidden sm:block" src={escalacao} alt="" />
         <PlayerPopover player={players['DAVID']}>
@@ -85,7 +85,7 @@ const PlayerPopover = ({
                 className="grid grid-cols-2 gap-x-3 items-center justify-between"
                 key={key}
               >
-                <div className=" text-right shrink-0">{key}</div>
+                <div className="shrink-0">{key}</div>
                 <CellInput
                   action={key}
                   player={player['NAME'] as string}

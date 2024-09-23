@@ -21,12 +21,14 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         }}
         twitter={{ cardType: 'summary_large_image' }}
       />
-      <Link href={'/'}>
-        <h1 className="text-center text-5xl md:text-7xl mt-6 mb-4 font-bold text-transparent w-fit m-auto bg-clip-text bg-gradient-to-r from-slate-100 to-slate-400">
+      <div className="w-full flex justify-center">
+        <Link
+          href={'/'}
+          className="text-5xl md:text-7xl my-10 font-bold text-transparent w-fit bg-clip-text bg-gradient-to-r from-slate-100 to-slate-400"
+        >
           HIRAISHIN
-        </h1>
-      </Link>
-
+        </Link>
+      </div>
       <Component {...pageProps} />
     </main>
   );
