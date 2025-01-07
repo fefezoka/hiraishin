@@ -1,26 +1,8 @@
 import { z } from 'zod';
 import { procedure, router } from '../trpc';
 import axios from '../../service/axios';
-import { players, ranks } from '@/commons/lol-data';
-
-const baseLeaguePoints = {
-  SILVER: 0,
-  GOLD: 400,
-  PLATINUM: 800,
-  EMERALD: 1200,
-  DIAMOND: 1600,
-  MASTER: 2000,
-};
-
-const getPDL = (league: League) => {
-  if (!baseLeaguePoints.hasOwnProperty(league.tier) || !ranks.includes(league.rank)) {
-    return 0;
-  }
-
-  const tierPDL = baseLeaguePoints[league.tier];
-  const rankIndex = ranks.indexOf(league.rank);
-  return tierPDL + rankIndex * 100 + league.leaguePoints;
-};
+import { players } from '@/commons/lol-data';
+import { getPDL } from '@/utils/league-of-legends/get-pdl';
 
 export const lolRouter = router({
   players: procedure.query(async () => {
