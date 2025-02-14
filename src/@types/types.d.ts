@@ -35,6 +35,7 @@ type League = {
   summonerId: string;
   leaguePoints: number;
   index: number;
+  totalLP: number;
 } & Elo;
 
 type Elo = {

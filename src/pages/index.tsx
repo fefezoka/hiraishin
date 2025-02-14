@@ -12,7 +12,7 @@ import {
 } from 'react-icons/md';
 import { getCookie, setCookie } from 'cookies-next';
 import { Loading } from '@/components/loading';
-import { getPDL } from '@/utils/league-of-legends/get-pdl';
+import { getTotalLP } from '@/utils/league-of-legends/get-total-lp';
 
 const LOL_VERSION = '14.24.1';
 
@@ -120,8 +120,8 @@ export default function Home() {
 
                       const lpDiff =
                         previousRanking?.[typeIndex]?.[player.gameName] &&
-                        getPDL(player.leagues[typeIndex]) -
-                          getPDL(previousRanking?.[typeIndex]?.[player.gameName].elo);
+                        getTotalLP(player.leagues[typeIndex]) -
+                          getTotalLP(previousRanking?.[typeIndex]?.[player.gameName].elo);
 
                       const winrate = Math.ceil(
                         (league.wins / (league.wins + league.losses)) * 100

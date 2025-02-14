@@ -9,7 +9,7 @@ const baseLeaguePoints = {
   MASTER: 2000,
 };
 
-export const getPDL = (elo: Elo | null) => {
+export const getTotalLP = (elo: Elo | null) => {
   if (!elo) {
     return 0;
   }
@@ -18,7 +18,7 @@ export const getPDL = (elo: Elo | null) => {
     return 0;
   }
 
-  const tierPDL = baseLeaguePoints[elo.tier];
+  const tierLP = baseLeaguePoints[elo.tier];
   const rankIndex = ranks.indexOf(elo.rank);
-  return tierPDL + rankIndex * 100 + elo.leaguePoints;
+  return tierLP + rankIndex * 100 + elo.leaguePoints;
 };

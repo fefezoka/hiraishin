@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { procedure, router } from '../trpc';
 import axios from '../../service/axios';
 import { players } from '@/commons/lol-data';
-import { getPDL } from '@/utils/league-of-legends/get-pdl';
+import { getTotalLP } from '@/utils/league-of-legends/get-total-lp';
 
 export const lolRouter = router({
   players: procedure.query(async () => {
@@ -29,16 +29,16 @@ export const lolRouter = router({
           ...player,
           ...account,
           leagues: [
-            leagues.find((league) => league?.queueType === 'RANKED_SOLO_5x5') || null,
-            leagues.find((league) => league?.queueType === 'RANKED_FLEX_SR') || null,
+            leagues.find((league) => league.queueType === 'RANKED_SOLO_5x5'),
+            leagues.find((league) => league.queueType === 'RANKED_FLEX_SR'),
           ].map((league) => {
             if (!league) {
-              return league;
+              return null;
             }
 
             return {
               ...league,
-              lp: getPDL(league),
+              totalLP: getTotalLP(league),
             };
           }),
         };
@@ -48,7 +48,7 @@ export const lolRouter = router({
         (_, index) =>
           players
             .filter((player) => player.leagues[index])
-            .sort((a, b) => getPDL(b.leagues[index]!) - getPDL(a.leagues[index]!))
+            .sort((a, b) => b.leagues[index]!.totalLP - a.leagues[index]!.totalLP!)
             .reduce(
               (acc, curr, idx) =>
                 Object.assign(
