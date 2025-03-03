@@ -27,7 +27,7 @@ export const characters = [
   {
     name: 'David',
     weight: 85,
-    height: 1.87,
+    height: 1.88,
     region: 'Sul',
     unemployed: false,
     mainGames: ['League of Legends'],
@@ -42,7 +42,7 @@ export const characters = [
   },
   {
     name: 'Bruno',
-    weight: 100,
+    weight: 110,
     height: 1.8,
     region: 'Sul',
     unemployed: true,
@@ -74,8 +74,8 @@ export const characters = [
   },
   {
     name: 'Thiago',
-    weight: 75,
-    height: 1.83,
+    weight: 80,
+    height: 1.87,
     region: 'Norte',
     unemployed: false,
     mainGames: ['League of Legends'],

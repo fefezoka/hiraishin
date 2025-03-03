@@ -6,16 +6,17 @@ import { cn } from '@/lib/utils';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useOutsideClick } from '@/hooks/mouse-handler';
+import { useRouter } from 'next/router';
 
 function getRandomValueByDay<T>(array: T[]): T {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const seed = today.getTime();
 
-  function seededRandom(seed: number): number {
+  const seededRandom = (seed: number): number => {
     const x = Math.sin(seed++) * 10000;
     return x - Math.floor(x);
-  }
+  };
 
   const randomIndex = Math.floor(seededRandom(seed) * array.length);
 
@@ -40,14 +41,14 @@ export default function Hiraishindle() {
     return text ? character.name.toLowerCase().includes(text.toLowerCase()) : true;
   });
 
-  const handleSubmitName = (name: string): void => {
+  const handleSubmitName = async (name: string): Promise<void> => {
     if (guesses.find((guess) => name === guess) || isFishined) {
       return;
     }
 
     setText('');
-    setGuesses((old) => [name, ...old]);
     setIsSelectOpen(false);
+    setGuesses((old) => [name, ...old]);
 
     if (name === CHOSEN.name) {
       setIsFinished(true);
@@ -105,7 +106,7 @@ export default function Hiraishindle() {
   };
 
   return (
-    <main className="max-w-[660px] font-medium m-auto px-3 pb-4">
+    <main className="max-w-[660px] font-medium m-auto px-3 pb-6">
       <form className="flex gap-2 relative max-w-[400px] w-full m-auto items-center justify-center">
         <Input
           onClick={() => setIsSelectOpen(true)}
@@ -175,7 +176,11 @@ export default function Hiraishindle() {
               })
             )}
           </div>
-          {isFishined && <span className="mt-5 block text-center text-4xl">GG!</span>}
+          {isFishined && (
+            <span id="gg" className="mt-6 block text-center text-4xl">
+              GG!
+            </span>
+          )}
         </div>
       )}
     </main>
