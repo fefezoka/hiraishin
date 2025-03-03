@@ -1,12 +1,11 @@
 import { Input } from '@/components/ui/input';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { MdSend } from 'react-icons/md';
 import { characters, properties } from '@/commons/hiraishindle-data';
 import { cn } from '@/lib/utils';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useOutsideClick } from '@/hooks/mouse-handler';
-import { useRouter } from 'next/router';
 
 function getRandomValueByDay<T>(array: T[]): T {
   const today = new Date();
@@ -38,8 +37,20 @@ export default function Hiraishindle() {
       return false;
     }
 
-    return text ? character.name.toLowerCase().includes(text.toLowerCase()) : true;
+    return text ? character.name.toLowerCase().startsWith(text.toLowerCase()) : true;
   });
+
+  const handleSubmitForm = (e: FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+
+    const input = (e.target as HTMLFormElement).elements[0] as HTMLInputElement;
+
+    if (!input.value) {
+      return;
+    }
+
+    handleSubmitName(formattedCharacters[0].name);
+  };
 
   const handleSubmitName = async (name: string): Promise<void> => {
     if (guesses.find((guess) => name === guess) || isFishined) {
@@ -53,6 +64,18 @@ export default function Hiraishindle() {
     if (name === CHOSEN.name) {
       setIsFinished(true);
     }
+  };
+
+  const onInputChange = (value: string) => {
+    if (text === '' && value.length === 1) {
+      setIsSelectOpen(true);
+    }
+
+    if (value.length === 0 && text.length === 1) {
+      setIsSelectOpen(false);
+    }
+
+    setText(value);
   };
 
   const checkAnswer = (value: PersonProperty, chosenValue: PersonProperty): string => {
@@ -107,22 +130,25 @@ export default function Hiraishindle() {
 
   return (
     <main className="max-w-[660px] font-medium m-auto px-3 pb-6">
-      <form className="flex gap-2 relative max-w-[400px] w-full m-auto items-center justify-center">
+      <form
+        onSubmit={handleSubmitForm}
+        className="flex gap-2 relative max-w-[400px] w-full m-auto items-center justify-center"
+      >
         <Input
-          onClick={() => setIsSelectOpen(true)}
+          onClick={(e) => e.currentTarget.value && setIsSelectOpen(true)}
           disabled={isFishined}
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={(e) => onInputChange(e.target.value)}
         />
-        <button>
+        <button type="submit">
           <MdSend className="w-5 h-5" />
         </button>
         {formattedCharacters.length !== 0 && (
           <div
             ref={ref}
             className={cn(
-              'w-full border top-12 left-0 transition-all absolute',
-              isSelectOpen ? 'h-[400px] opacity-100' : 'overflow-hidden h-0 opacity-0'
+              'w-full border top-12 left-0  h-[400px] ',
+              isSelectOpen ? 'absolute' : 'hidden'
             )}
           >
             <ScrollArea className="h-[inherit] bg-gray-800">
@@ -130,7 +156,8 @@ export default function Hiraishindle() {
               <div className="divide-y divide-gray-700">
                 {formattedCharacters.map((character) => (
                   <div
-                    className="px-4 py-4 cursor-pointer hover:bg-gray-700 transition-all duration-75"
+                    onSelect={() => console.log(character)}
+                    className="px-4 py-3 cursor-pointer hover:bg-gray-700 transition-all duration-75"
                     key={character.name}
                     onClick={() => handleSubmitName(character.name)}
                   >
