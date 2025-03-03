@@ -84,3 +84,16 @@ type LeagueState = Record<
 
 type Tier = 'SILVER' | 'GOLD' | 'PLATINUM' | 'EMERALD' | 'DIAMOND' | 'MASTER';
 type Rank = 'IV' | 'III' | 'II' | 'I';
+
+// Hiraishindle
+
+type PersonProperty = number | boolean | string[] | string;
+
+interface Person {
+  name: string;
+  mainGames: string[];
+  region: string;
+  unemployed: boolean;
+  weight: number;
+  height: number;
+}
