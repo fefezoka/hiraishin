@@ -57,7 +57,7 @@ export const characters = [
     mainGames: ['GTA RP'],
   },
   {
-    name: 'João',
+    name: 'Ianguas',
     weight: 85,
     height: 1.82,
     region: 'Sul',

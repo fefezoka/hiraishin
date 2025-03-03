@@ -4,7 +4,7 @@ import { MdSend } from 'react-icons/md';
 import { characters, properties } from '@/commons/hiraishindle-data';
 import { cn } from '@/lib/utils';
 import { ArrowDown, ArrowUp } from 'lucide-react';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useOutsideClick } from '@/hooks/mouse-handler';
 
 function getRandomValueByDay<T>(array: T[]): T {
@@ -129,87 +129,98 @@ export default function Hiraishindle() {
   };
 
   return (
-    <main className="max-w-[660px] font-medium m-auto px-3 pb-6">
-      <form
-        onSubmit={handleSubmitForm}
-        className="flex gap-2 relative max-w-[400px] w-full m-auto items-center justify-center"
-      >
-        <Input
-          onClick={(e) => e.currentTarget.value && setIsSelectOpen(true)}
-          disabled={isFishined}
-          value={text}
-          onChange={(e) => onInputChange(e.target.value)}
-        />
-        <button type="submit">
-          <MdSend className="w-5 h-5" />
-        </button>
-        {formattedCharacters.length !== 0 && (
-          <div
-            ref={ref}
-            className={cn(
-              'w-full border top-12 left-0  h-[400px] ',
-              isSelectOpen ? 'absolute' : 'hidden'
-            )}
-          >
-            <ScrollArea className="h-[inherit] bg-gray-800">
-              <div className="h-0.5 w-full bg-ring" />
-              <div className="divide-y divide-gray-700">
-                {formattedCharacters.map((character) => (
-                  <div
-                    onSelect={() => console.log(character)}
-                    className="px-4 py-3 cursor-pointer hover:bg-gray-700 transition-all duration-75"
-                    key={character.name}
-                    onClick={() => handleSubmitName(character.name)}
-                  >
-                    {character.name}
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
-          </div>
-        )}
-      </form>
-      {guesses.length !== 0 && (
-        <div className="mt-6 text-sm">
-          <div className="grid gap-2 grid-cols-6 text-center">
-            {properties.map((property) => (
-              <div
-                className="flex items-center justify-center border-b-4 p-2"
-                key={property}
-              >
-                <span>{property}</span>
-              </div>
-            ))}
-            {guesses.map((guess) =>
-              Object.values(
-                characters.find((character) => character.name === guess)!
-              ).map((value, index) => {
-                const chosenCharacterValues = Object.values(chosenCharacter);
+    <main className="m-2 flex items-center flex-col font-medium px-3 pb-6">
+      <div className="w-full sm:max-w-[400px]">
+        <form
+          onSubmit={handleSubmitForm}
+          className="flex mb-6  gap-2 relative w-full m-auto items-center justify-center"
+        >
+          <Input
+            onClick={(e) => e.currentTarget.value && setIsSelectOpen(true)}
+            disabled={isFishined}
+            value={text}
+            onChange={(e) => onInputChange(e.target.value)}
+          />
+          <button type="submit">
+            <MdSend className="w-5 h-5" />
+          </button>
+          {formattedCharacters.length !== 0 && (
+            <div
+              ref={ref}
+              className={cn(
+                'w-full border top-12 left-0  h-[400px] ',
+                isSelectOpen ? 'absolute' : 'hidden'
+              )}
+            >
+              <ScrollArea className="h-[inherit] bg-gray-800">
+                <div className="h-0.5 w-full bg-ring" />
+                <div className="divide-y divide-gray-700">
+                  {formattedCharacters.map((character) => (
+                    <div
+                      onSelect={() => console.log(character)}
+                      className="px-4 py-3 cursor-pointer hover:bg-gray-700 transition-all duration-75"
+                      key={character.name}
+                      onClick={() => handleSubmitName(character.name)}
+                    >
+                      {character.name}
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
+            </div>
+          )}
+        </form>
+        {guesses.length !== 0 && (
+          <div className="text-sm w-[100%] sm:w-[160%] sm:-mx-[30%] overflow-x-auto overflow-y-hidden">
+            <div className="w-[160%] sm:w-[unset] flex gap-2 text-center">
+              {properties.map((property) => (
+                <div
+                  className="flex basis-[calc(16.6%-4px)] w-0 items-center justify-center border-b-4 p-2"
+                  key={property}
+                >
+                  <span>{property}</span>
+                </div>
+              ))}
+            </div>
+            <div className="w-[160%] sm:w-[unset] mt-3 flex flex-col gap-2 text-center">
+              {guesses.map((guess) => {
+                const properties = Object.values(
+                  characters.find((character) => character.name === guess)!
+                );
 
                 return (
-                  <div
-                    className={cn(
-                      'h-[75px] px-0.5 flex items-center justify-center font-semibold py-4 rounded-lg border-4-black data-[answer=wrong]:bg-red-700 data-[answer=correct]:bg-green-700 data-[answer=semicorrect]:bg-yellow-700',
-                      index === 0 && 'bg-gray-200 text-black'
-                    )}
-                    data-answer={
-                      index !== 0 && checkAnswer(value, chosenCharacterValues[index])
-                    }
-                    key={value.toString()}
-                  >
-                    {formatProperty(value, chosenCharacterValues[index])}
+                  <div className="flex gap-2" key={guess}>
+                    {properties.map((value, index) => {
+                      const chosenCharacterValues = Object.values(chosenCharacter);
+
+                      return (
+                        <div
+                          className={cn(
+                            'px-0.5 basis-[calc(16.6%-4px)] aspect-[0.95] w-0 flex items-center justify-center font-semibold py-4 rounded-lg border-4-black data-[answer=wrong]:bg-red-700 data-[answer=correct]:bg-green-700 data-[answer=semicorrect]:bg-yellow-700',
+                            index === 0 && 'bg-gray-200 text-black'
+                          )}
+                          data-answer={
+                            index !== 0 &&
+                            checkAnswer(value, chosenCharacterValues[index])
+                          }
+                          key={value.toString()}
+                        >
+                          {formatProperty(value, chosenCharacterValues[index])}
+                        </div>
+                      );
+                    })}
                   </div>
                 );
-              })
+              })}
+            </div>
+            {isFishined && (
+              <span id="gg" className="mt-6 block text-center text-4xl">
+                GG!
+              </span>
             )}
           </div>
-          {isFishined && (
-            <span id="gg" className="mt-6 block text-center text-4xl">
-              GG!
-            </span>
-          )}
-        </div>
-      )}
+        )}
+      </div>
     </main>
   );
 }
