@@ -66,8 +66,8 @@ export const characters = [
   },
   {
     name: 'Neto',
-    weight: 72,
-    height: 1.72,
+    weight: 82,
+    height: 1.73,
     region: 'Norte',
     unemployed: false,
     mainGames: ['League of Legends', 'FIFA'],
@@ -110,6 +110,6 @@ export const characters = [
     height: 1.83,
     region: 'Sul',
     unemployed: false,
-    mainGames: ['League of Legends', 'Counter Strike'],
+    mainGames: ['Counter Strike'],
   },
 ];
