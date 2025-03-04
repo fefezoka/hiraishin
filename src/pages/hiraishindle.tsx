@@ -1,10 +1,10 @@
 import { Input } from '@/components/ui/input';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { MdSend } from 'react-icons/md';
 import { characters, properties } from '@/commons/hiraishindle-data';
 import { cn } from '@/lib/utils';
 import { ArrowDown, ArrowUp } from 'lucide-react';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { useOutsideClick } from '@/hooks/mouse-handler';
 
 function getRandomValueByDay<T>(array: T[]): T {
@@ -26,14 +26,35 @@ const CHOSEN = getRandomValueByDay(characters);
 
 export default function Hiraishindle() {
   const [text, setText] = useState<string>('');
-  const [guesses, setGuesses] = useState<string[]>([]);
+  const [answers, setAnswers] = useState<string[]>([]);
   const [isFishined, setIsFinished] = useState<boolean>();
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>();
   const ref = useOutsideClick(() => setIsSelectOpen(false));
 
+  useEffect(() => {
+    const lastAnswerDate = new Date(
+      JSON.parse(localStorage.getItem('hiraishindle-last_answer_timestamp') || '{}')
+    );
+
+    const today = new Date();
+
+    if (
+      today.getDay() !== lastAnswerDate.getDay() &&
+      today.getMonth() !== lastAnswerDate.getMonth()
+    ) {
+      return;
+    }
+
+    const answers = JSON.parse(localStorage.getItem('hiraishindle-answers') as any) as
+      | string[]
+      | null;
+
+    answers && setAnswers(answers);
+  }, []);
+
   const chosenCharacter = characters.find((character) => character.name === CHOSEN.name)!;
   const formattedCharacters = characters.filter((character) => {
-    if (guesses.find((guess) => guess === character.name)) {
+    if (answers.find((guess) => guess === character.name)) {
       return false;
     }
 
@@ -49,17 +70,28 @@ export default function Hiraishindle() {
       return;
     }
 
-    handleSubmitName(formattedCharacters[0].name);
+    if (formattedCharacters.length) {
+      handleSubmitName(formattedCharacters[0].name);
+    }
   };
 
   const handleSubmitName = async (name: string): Promise<void> => {
-    if (guesses.find((guess) => name === guess) || isFishined) {
+    if (answers.find((guess) => name === guess) || isFishined) {
       return;
     }
 
     setText('');
     setIsSelectOpen(false);
-    setGuesses((old) => [name, ...old]);
+
+    const newAnswers = [name, ...answers];
+
+    setAnswers(newAnswers);
+
+    localStorage.setItem('hiraishindle-answers', JSON.stringify(newAnswers));
+    localStorage.setItem(
+      'hiraishindle-last_answer_timestamp',
+      new Date().getTime().toString()
+    );
 
     if (name === CHOSEN.name) {
       setIsFinished(true);
@@ -92,6 +124,7 @@ export default function Hiraishindle() {
         return 'semicorrect';
       }
     }
+
     if (value === chosenValue) {
       return 'correct';
     }
@@ -110,7 +143,7 @@ export default function Hiraishindle() {
     if (typeof value === 'number' && typeof chosenValue === 'number') {
       return (
         <div className="flex gap-1 items-center">
-          {value.toFixed(2)}
+          {value}
           {value !== chosenValue &&
             (value > chosenValue ? (
               <ArrowDown strokeWidth={3.5} className="w-4 h-4" />
@@ -133,7 +166,7 @@ export default function Hiraishindle() {
       <div className="w-full sm:max-w-[400px]">
         <form
           onSubmit={handleSubmitForm}
-          className="flex mb-6  gap-2 relative w-full m-auto items-center justify-center"
+          className="flex mb-6 gap-2 relative w-full m-auto items-center justify-center"
         >
           <Input
             onClick={(e) => e.currentTarget.value && setIsSelectOpen(true)}
@@ -170,7 +203,7 @@ export default function Hiraishindle() {
             </div>
           )}
         </form>
-        {guesses.length !== 0 && (
+        {answers.length !== 0 && (
           <div className="text-sm w-[100%] sm:w-[160%] sm:-mx-[30%] overflow-x-auto overflow-y-hidden">
             <div className="w-[160%] sm:w-[unset] flex gap-2 text-center">
               {properties.map((property) => (
@@ -182,8 +215,8 @@ export default function Hiraishindle() {
                 </div>
               ))}
             </div>
-            <div className="w-[160%] sm:w-[unset] mt-3 flex flex-col gap-2 text-center">
-              {guesses.map((guess) => {
+            <div className="w-[160%] sm:w-[unset] mt-2 flex flex-col gap-2 text-center">
+              {answers.map((guess) => {
                 const properties = Object.values(
                   characters.find((character) => character.name === guess)!
                 );
