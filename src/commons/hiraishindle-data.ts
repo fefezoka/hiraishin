@@ -34,7 +34,7 @@ export const characters = [
   },
   {
     name: 'Giovanni',
-    weight: 115,
+    weight: 140,
     height: 1.85,
     region: 'Sul',
     unemployed: true,
@@ -42,7 +42,7 @@ export const characters = [
   },
   {
     name: 'Bruno',
-    weight: 110,
+    weight: 120,
     height: 1.8,
     region: 'Sul',
     unemployed: true,
@@ -50,7 +50,7 @@ export const characters = [
   },
   {
     name: 'Gustavo',
-    weight: 110,
+    weight: 130,
     height: 1.83,
     region: 'Sul',
     unemployed: false,
