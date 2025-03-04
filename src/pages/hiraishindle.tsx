@@ -1,5 +1,5 @@
 import { Input } from '@/components/ui/input';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { MdSend } from 'react-icons/md';
 import { characters, properties } from '@/commons/hiraishindle-data';
 import { cn } from '@/lib/utils';
@@ -47,11 +47,10 @@ export default function Hiraishindle() {
       return;
     }
 
-    const answers = JSON.parse(localStorage.getItem('hiraishindle-answers') as any) as
-      | string[]
-      | null;
+    const answers = JSON.parse(localStorage.getItem('hiraishindle-answers') || '[]') as
+      | string[];
 
-    if (answers) {
+    if (answers.length) {
       answers.some((answer) => answer === CHOSEN.name) && setIsFinished(true);
       setAnswers(answers);
     }
@@ -108,7 +107,7 @@ export default function Hiraishindle() {
       setIsSelectOpen(true);
     }
 
-    if (value.length === 0 && text.length === 1) {
+    if (text.length === 1 && value.length === 0) {
       setIsSelectOpen(false);
     }
 
@@ -175,6 +174,7 @@ export default function Hiraishindle() {
         <span className="text-lg mb-2 block">Adivinhe o Hokage de hoje!</span>
         <div className="flex gap-3">
           <Input
+            className="hover:bg-gray-800 transition-colors"
             onClick={(e) => e.currentTarget.value && setIsSelectOpen(true)}
             disabled={isFishined}
             value={text}
@@ -188,7 +188,7 @@ export default function Hiraishindle() {
           <div
             ref={ref}
             className={cn(
-              'w-full border top-[88px] left-0  h-[400px] ',
+              'w-full border top-[88px] left-0 h-[400px] ',
               isSelectOpen ? 'absolute' : 'hidden'
             )}
           >
@@ -215,7 +215,7 @@ export default function Hiraishindle() {
           <div className="w-[160%] sm:w-[unset] flex gap-2 text-center">
             {properties.map((property) => (
               <div
-                className="flex basis-[calc(16.6%-4px)] w-0 items-center justify-center border-b-4 p-2"
+                className="flex basis-[calc(16.6%-4px)] w-0 items-center justify-center hover:border-ring transition-colors border-b-4 p-2"
                 key={property}
               >
                 <span>{property}</span>
@@ -236,7 +236,7 @@ export default function Hiraishindle() {
                     return (
                       <div
                         className={cn(
-                          'px-0.5 basis-[calc(16.6%-4px)] aspect-[0.95] w-0 flex items-center justify-center font-semibold py-4 rounded-lg border-4-black data-[answer=wrong]:bg-red-700 data-[answer=correct]:bg-green-700 data-[answer=semicorrect]:bg-yellow-700',
+                          'px-0.5 basis-[calc(16.6%-4px)] aspect-[0.95] transition-colors w-0 flex items-center justify-center font-semibold py-4 rounded-lg border-4-black data-[answer=wrong]:bg-red-700 hover:data-[answer=wrong]:bg-red-600 data-[answer=correct]:bg-green-700 hover:data-[answer=correct]:bg-green-600 data-[answer=semicorrect]:bg-yellow-700 hover:data-[answer=semicorrect]:bg-yellow-600',
                           index === 0 && 'bg-gray-200 text-black'
                         )}
                         data-answer={
