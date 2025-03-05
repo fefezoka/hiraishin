@@ -22,7 +22,7 @@ export const characters = [
     height: 1.69,
     region: 'Sul',
     unemployed: false,
-    mainGames: ['LOL', 'Pixelmon', 'Valorant'],
+    mainGames: ['LOL', 'osu!', 'Pixelmon', 'Valorant', 'Honkai'],
   },
   {
     name: 'David',
@@ -38,7 +38,7 @@ export const characters = [
     height: 1.85,
     region: 'Sul',
     unemployed: true,
-    mainGames: ['LOL'],
+    mainGames: ['LOL', 'TFT'],
   },
   {
     name: 'Bruno',
@@ -46,7 +46,7 @@ export const characters = [
     height: 1.8,
     region: 'Sul',
     unemployed: true,
-    mainGames: ['LOL', 'LOR', 'Pixelmon'],
+    mainGames: ['LOL', 'LOR', 'Pixelmon', 'Honkai'],
   },
   {
     name: 'Gustavo',
@@ -94,7 +94,7 @@ export const characters = [
     height: 1.8,
     region: 'Sul',
     unemployed: true,
-    mainGames: ['osu!', 'TFT', 'Pixelmon'],
+    mainGames: ['osu!', 'TFT', 'Pixelmon', 'Honkai'],
   },
   {
     name: 'Carlos',
@@ -110,6 +110,6 @@ export const characters = [
     height: 1.83,
     region: 'Sul',
     unemployed: false,
-    mainGames: ['CS2', 'FIFA'],
+    mainGames: ['CS2', 'FIFA', 'R6'],
   },
 ];

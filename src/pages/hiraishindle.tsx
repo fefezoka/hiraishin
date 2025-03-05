@@ -115,16 +115,16 @@ export default function Hiraishindle() {
   };
 
   const checkAnswer = (value: PersonProperty, chosenValue: PersonProperty): string => {
-    if (Array.isArray(value)) {
+    if (Array.isArray(value) && Array.isArray(chosenValue)) {
       if (
-        value.every((itr) => (chosenValue as []).some((chosenItr) => chosenItr === itr))
+        value.length === chosenValue.length &&
+        (value.every((itr) => chosenValue.includes(itr)) ||
+          value.every((itr, i) => itr === chosenValue[i]))
       ) {
-        if (
-          value.length === (chosenValue as []).length &&
-          value.every((itr, i) => itr === (chosenValue as [])[i])
-        ) {
-          return 'correct';
-        }
+        return 'correct';
+      }
+
+      if (value.some((itr) => chosenValue.includes(itr))) {
         return 'semicorrect';
       }
     }
@@ -167,11 +167,8 @@ export default function Hiraishindle() {
 
   return (
     <main className="my-2 flex w-full sm:max-w-[400px] justify-center mx-auto items-center flex-col font-medium px-3 pb-6">
-      <form
-        onSubmit={handleSubmitForm}
-        className="mb-6 text-center gap-2 relative w-full m-auto"
-      >
-        <span className="text-lg mb-2 block">Adivinhe o Hokage de hoje!</span>
+      <form onSubmit={handleSubmitForm} className="mb-6 gap-2 relative w-full m-auto">
+        <span className="text-center text-lg mb-2 block">Adivinhe o Hokage de hoje!</span>
         <div className="flex gap-3">
           <Input
             className="hover:bg-gray-800 transition-colors"
