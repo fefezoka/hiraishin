@@ -29,17 +29,17 @@ export default function Hiraishindle() {
   const [answers, setAnswers] = useState<string[]>([]);
   const [isFishined, setIsFinished] = useState<boolean>();
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>();
-  const ref = useOutsideClick(() => setIsSelectOpen(false));
+  const selectRef = useOutsideClick(() => setIsSelectOpen(false));
 
   useEffect(() => {
     const lastAnswerDate = new Date(
-      JSON.parse(localStorage.getItem('hiraishindle-last_answer_timestamp') || '{}')
+      Number(localStorage.getItem('hiraishindle-last_answer_timestamp'))
     );
 
     const today = new Date();
 
     if (
-      today.getDay() !== lastAnswerDate.getDay() &&
+      today.getDay() !== lastAnswerDate.getDay() ||
       today.getMonth() !== lastAnswerDate.getMonth()
     ) {
       localStorage.removeItem('hiraishindle-answers');
@@ -115,16 +115,16 @@ export default function Hiraishindle() {
   };
 
   const checkAnswer = (value: PersonProperty, chosenValue: PersonProperty): string => {
-    if (Array.isArray(value)) {
+    if (Array.isArray(value) && Array.isArray(chosenValue)) {
       if (
-        value.every((itr) => (chosenValue as []).some((chosenItr) => chosenItr === itr))
+        value.length === chosenValue.length &&
+        (value.every((itr) => chosenValue.includes(itr)) ||
+          value.every((itr, i) => itr === chosenValue[i]))
       ) {
-        if (
-          value.length === (chosenValue as []).length &&
-          value.every((itr, i) => itr === (chosenValue as [])[i])
-        ) {
-          return 'correct';
-        }
+        return 'correct';
+      }
+
+      if (value.some((itr) => chosenValue.includes(itr))) {
         return 'semicorrect';
       }
     }
@@ -133,7 +133,7 @@ export default function Hiraishindle() {
       return 'correct';
     }
 
-    return 'wrong';
+    return 'incorrect';
   };
 
   const formatProperty = (
@@ -167,11 +167,8 @@ export default function Hiraishindle() {
 
   return (
     <main className="my-2 flex w-full sm:max-w-[400px] justify-center mx-auto items-center flex-col font-medium px-3 pb-6">
-      <form
-        onSubmit={handleSubmitForm}
-        className="mb-6 text-center gap-2 relative w-full m-auto"
-      >
-        <span className="text-lg mb-2 block">Adivinhe o Hokage de hoje!</span>
+      <form onSubmit={handleSubmitForm} className="mb-6 gap-2 relative w-full m-auto">
+        <span className="text-center text-lg mb-2 block">Adivinhe o Hokage de hoje!</span>
         <div className="flex gap-3">
           <Input
             className="hover:bg-gray-800 transition-colors"
@@ -186,7 +183,7 @@ export default function Hiraishindle() {
         </div>
         {formattedCharacters.length !== 0 && (
           <div
-            ref={ref}
+            ref={selectRef}
             className={cn(
               'w-full border top-[88px] left-0 h-[400px] ',
               isSelectOpen ? 'absolute' : 'hidden'
@@ -236,7 +233,7 @@ export default function Hiraishindle() {
                     return (
                       <div
                         className={cn(
-                          'px-0.5 basis-[calc(16.6%-4px)] aspect-[0.95] transition-colors w-0 flex items-center justify-center font-semibold py-4 rounded-lg border-4-black data-[answer=wrong]:bg-red-700 hover:data-[answer=wrong]:bg-red-600 data-[answer=correct]:bg-green-700 hover:data-[answer=correct]:bg-green-600 data-[answer=semicorrect]:bg-yellow-700 hover:data-[answer=semicorrect]:bg-yellow-600',
+                          'px-0.5 basis-[calc(16.6%-4px)] aspect-[0.95] transition-colors w-0 flex items-center justify-center font-semibold py-4 rounded-lg border-4-black data-[answer=incorrect]:bg-red-700 hover:data-[answer=incorrect]:bg-red-600 data-[answer=correct]:bg-green-700 hover:data-[answer=correct]:bg-green-600 data-[answer=semicorrect]:bg-yellow-700 hover:data-[answer=semicorrect]:bg-yellow-600',
                           index === 0 && 'bg-gray-200 text-black'
                         )}
                         data-answer={
