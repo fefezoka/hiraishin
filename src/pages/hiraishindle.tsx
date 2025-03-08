@@ -40,6 +40,17 @@ export default function Hiraishindle() {
   const [isFishined, setIsFinished] = useState<boolean>();
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>();
   const selectRef = useOutsideClick(() => setIsSelectOpen(false));
+  const [visibleIndexes, setVisibleIndexes] = useState<number[]>([]);
+
+  useEffect(() => {
+    if (answers.length === 0) return;
+
+    properties.forEach((_, propertyIndex) => {
+      setTimeout(() => {
+        setVisibleIndexes((prev) => [...prev, propertyIndex]);
+      }, 500 * propertyIndex);
+    });
+  }, [answers]);
 
   useEffect(() => {
     const lastAnswerDate = new Date(
@@ -61,6 +72,7 @@ export default function Hiraishindle() {
       | string[];
 
     if (answers.length) {
+      setVisibleIndexes(properties.map((_, index) => index));
       answers.some((answer) => answer === CHOSEN.name) && setIsFinished(true);
       setAnswers(answers);
     }
@@ -94,6 +106,7 @@ export default function Hiraishindle() {
       return;
     }
 
+    setVisibleIndexes([]);
     setText('');
     setIsSelectOpen(false);
 
@@ -239,12 +252,16 @@ export default function Hiraishindle() {
                 <div className="flex gap-2" key={guess}>
                   {properties.map((value, index) => {
                     const chosenCharacterValues = Object.values(chosenCharacter);
+                    const isFirstRow = answers.indexOf(guess) === 0;
+                    const isVisible = isFirstRow ? visibleIndexes.includes(index) : true;
 
                     return (
                       <div
                         className={cn(
-                          'px-0.5 basis-[calc(16.6%-4px)] aspect-[0.95] transition-colors w-0 flex items-center justify-center font-semibold py-4 rounded-lg border-4-black data-[answer=incorrect]:bg-red-700 hover:data-[answer=incorrect]:bg-red-600 data-[answer=correct]:bg-green-700 hover:data-[answer=correct]:bg-green-600 data-[answer=semicorrect]:bg-yellow-700 hover:data-[answer=semicorrect]:bg-yellow-600',
-                          index === 0 && 'bg-gray-200 text-black'
+                          'opacity-0 transition-opacity duration-500',
+                          isVisible && 'opacity-100',
+                          index === 0 && 'bg-gray-200 text-black',
+                          'px-0.5 basis-[calc(16.6%-4px)] aspect-[0.95] w-0 flex items-center justify-center font-semibold py-4 rounded-lg border-4-black data-[answer=incorrect]:bg-red-700 hover:data-[answer=incorrect]:bg-red-600 data-[answer=correct]:bg-green-700 hover:data-[answer=correct]:bg-green-600 data-[answer=semicorrect]:bg-yellow-700 hover:data-[answer=semicorrect]:bg-yellow-600'
                         )}
                         data-answer={
                           index !== 0 && checkAnswer(value, chosenCharacterValues[index])
@@ -259,7 +276,7 @@ export default function Hiraishindle() {
               );
             })}
           </div>
-          {isFishined && (
+          {visibleIndexes.length === properties.length && isFishined && (
             <span id="gg" className="mt-6 block text-center text-4xl">
               GG!
             </span>
