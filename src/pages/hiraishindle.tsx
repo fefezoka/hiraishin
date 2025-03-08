@@ -42,6 +42,15 @@ export default function Hiraishindle() {
   const selectRef = useOutsideClick(() => setIsSelectOpen(false));
   const [visibleIndexes, setVisibleIndexes] = useState<number[][]>([]);
 
+  const chosenCharacter = characters.find((character) => character.name === CHOSEN.name)!;
+  const formattedCharacters = characters.filter((character) => {
+    if (answers.find((guess) => guess === character.name)) {
+      return false;
+    }
+
+    return text ? character.name.toLowerCase().startsWith(text.toLowerCase()) : true;
+  });
+
   useEffect(() => {
     if (answers.length === 0) return;
 
@@ -89,15 +98,6 @@ export default function Hiraishindle() {
       setAnswers(answers);
     }
   }, []);
-
-  const chosenCharacter = characters.find((character) => character.name === CHOSEN.name)!;
-  const formattedCharacters = characters.filter((character) => {
-    if (answers.find((guess) => guess === character.name)) {
-      return false;
-    }
-
-    return text ? character.name.toLowerCase().startsWith(text.toLowerCase()) : true;
-  });
 
   const handleSubmitForm = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
