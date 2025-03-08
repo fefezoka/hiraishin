@@ -40,14 +40,24 @@ export default function Hiraishindle() {
   const [isFishined, setIsFinished] = useState<boolean>();
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>();
   const selectRef = useOutsideClick(() => setIsSelectOpen(false));
-  const [visibleIndexes, setVisibleIndexes] = useState<number[]>([]);
+  const [visibleIndexes, setVisibleIndexes] = useState<number[][]>([]);
 
   useEffect(() => {
     if (answers.length === 0) return;
 
+    const answerIndex = answers.length - 1;
+    setVisibleIndexes((prev) => [...prev, []]);
+
     properties.forEach((_, propertyIndex) => {
       setTimeout(() => {
-        setVisibleIndexes((prev) => [...prev, propertyIndex]);
+        setVisibleIndexes((prev) => {
+          const updatedMatrix = [...prev];
+          updatedMatrix[answerIndex] = [
+            ...(updatedMatrix[answerIndex] || []),
+            propertyIndex,
+          ];
+          return updatedMatrix;
+        });
       }, 500 * propertyIndex);
     });
   }, [answers]);
@@ -72,7 +82,9 @@ export default function Hiraishindle() {
       | string[];
 
     if (answers.length) {
-      setVisibleIndexes(properties.map((_, index) => index));
+      setVisibleIndexes(
+        answers.map(() => properties.map((_, propertyIndex) => propertyIndex))
+      );
       answers.some((answer) => answer === CHOSEN.name) && setIsFinished(true);
       setAnswers(answers);
     }
@@ -106,11 +118,10 @@ export default function Hiraishindle() {
       return;
     }
 
-    setVisibleIndexes([]);
     setText('');
     setIsSelectOpen(false);
 
-    const newAnswers = [name, ...answers];
+    const newAnswers = [...answers, name];
 
     setAnswers(newAnswers);
 
@@ -242,33 +253,34 @@ export default function Hiraishindle() {
               </div>
             ))}
           </div>
-          <div className="w-[160%] sm:w-[unset] mt-2 flex flex-col gap-2 text-center">
-            {answers.map((guess) => {
+          <div className="w-[160%] sm:w-[unset] mt-2 flex flex-col-reverse gap-2 text-center">
+            {answers.map((guess, row) => {
               const properties = Object.values(
                 characters.find((character) => character.name === guess)!
               );
 
               return (
                 <div className="flex gap-2" key={guess}>
-                  {properties.map((value, index) => {
+                  {properties.map((value, column) => {
                     const chosenCharacterValues = Object.values(chosenCharacter);
-                    const isFirstRow = answers.indexOf(guess) === 0;
-                    const isVisible = isFirstRow ? visibleIndexes.includes(index) : true;
+                    const isVisible =
+                      visibleIndexes[row] && visibleIndexes[row].includes(column);
 
                     return (
                       <div
                         className={cn(
                           'opacity-0 transition-opacity duration-500',
                           isVisible && 'opacity-100',
-                          index === 0 && 'bg-gray-200 text-black',
+                          column === 0 && 'bg-gray-200 text-black',
                           'px-0.5 basis-[calc(16.6%-4px)] aspect-[0.95] w-0 flex items-center justify-center font-semibold py-4 rounded-lg border-4-black data-[answer=incorrect]:bg-red-700 hover:data-[answer=incorrect]:bg-red-600 data-[answer=correct]:bg-green-700 hover:data-[answer=correct]:bg-green-600 data-[answer=semicorrect]:bg-yellow-700 hover:data-[answer=semicorrect]:bg-yellow-600'
                         )}
                         data-answer={
-                          index !== 0 && checkAnswer(value, chosenCharacterValues[index])
+                          column !== 0 &&
+                          checkAnswer(value, chosenCharacterValues[column])
                         }
                         key={value.toString()}
                       >
-                        {formatProperty(value, chosenCharacterValues[index])}
+                        {formatProperty(value, chosenCharacterValues[column])}
                       </div>
                     );
                   })}
