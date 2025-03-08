@@ -209,7 +209,7 @@ export default function Hiraishindle() {
             ref={selectRef}
             className={cn(
               'w-full border top-[88px] left-0 h-[400px] ',
-              isSelectOpen ? 'absolute' : 'hidden'
+              isSelectOpen ? 'absolute z-50' : 'hidden'
             )}
           >
             <ScrollArea className="h-[inherit] bg-gray-800">
