@@ -7,22 +7,32 @@ import { ArrowDown, ArrowUp } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useOutsideClick } from '@/hooks/mouse-handler';
 
-function getRandomValueByDay<T>(array: T[]): T {
+const getRandomValueByDay = () => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const seed = today.getTime();
+  let seed = today.getTime();
 
-  const seededRandom = (seed: number): number => {
+  const randomIndex = (seed: number): number => {
     const x = Math.sin(seed++) * 10000;
-    return x - Math.floor(x);
+    const s = x - Math.floor(x);
+    return Math.floor(s * characters.length);
   };
 
-  const randomIndex = Math.floor(seededRandom(seed) * array.length);
+  let todayRandomIndex;
 
-  return array[randomIndex];
-}
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+  const yesterdayRandomIndex = randomIndex(yesterday.getTime());
 
-const CHOSEN = getRandomValueByDay(characters);
+  do {
+    todayRandomIndex = randomIndex(seed);
+    seed += 1;
+  } while (todayRandomIndex === yesterdayRandomIndex);
+
+  return characters[todayRandomIndex];
+};
+
+const CHOSEN = getRandomValueByDay();
 
 export default function Hiraishindle() {
   const [text, setText] = useState<string>('');
