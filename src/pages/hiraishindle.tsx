@@ -7,22 +7,32 @@ import { ArrowDown, ArrowUp } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useOutsideClick } from '@/hooks/mouse-handler';
 
-function getRandomValueByDay<T>(array: T[]): T {
+const getRandomValueByDay = () => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const seed = today.getTime();
+  let seed = today.getTime();
 
-  const seededRandom = (seed: number): number => {
+  const randomIndex = (seed: number): number => {
     const x = Math.sin(seed++) * 10000;
-    return x - Math.floor(x);
+    const s = x - Math.floor(x);
+    return Math.floor(s * characters.length);
   };
 
-  const randomIndex = Math.floor(seededRandom(seed) * array.length);
+  let todayRandomIndex;
 
-  return array[randomIndex];
-}
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+  const yesterdayRandomIndex = randomIndex(yesterday.getTime());
 
-const CHOSEN = getRandomValueByDay(characters);
+  do {
+    todayRandomIndex = randomIndex(seed);
+    seed += 1;
+  } while (todayRandomIndex === yesterdayRandomIndex);
+
+  return characters[todayRandomIndex];
+};
+
+const CHOSEN = getRandomValueByDay();
 
 export default function Hiraishindle() {
   const [text, setText] = useState<string>('');
@@ -30,6 +40,48 @@ export default function Hiraishindle() {
   const [isFishined, setIsFinished] = useState<boolean>();
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>();
   const selectRef = useOutsideClick(() => setIsSelectOpen(false));
+  const [visibleIndexes, setVisibleIndexes] = useState<number[][]>([]);
+
+  const chosenCharacter = characters.find((character) => character.name === CHOSEN.name)!;
+  const formattedCharacters = characters.filter((character) => {
+    if (answers.find((guess) => guess === character.name)) {
+      return false;
+    }
+
+    if (text) {
+      return character.name.toLowerCase().startsWith(text.toLowerCase());
+    }
+
+    return true;
+  });
+
+  useEffect(() => {
+    if (answers.length === 0) return;
+
+    const answerIndex = answers.length - 1;
+
+    if (
+      visibleIndexes[answerIndex] &&
+      visibleIndexes[answerIndex].length === properties.length
+    ) {
+      return;
+    }
+
+    properties.forEach((_, propertyIndex) => {
+      setTimeout(() => {
+        setVisibleIndexes((prev) => {
+          const updatedMatrix = [...prev];
+          updatedMatrix[answerIndex] = [
+            ...(updatedMatrix[answerIndex] || []),
+            propertyIndex,
+          ];
+          return updatedMatrix;
+        });
+      }, 500 * propertyIndex);
+    });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [answers]);
 
   useEffect(() => {
     const lastAnswerDate = new Date(
@@ -51,19 +103,13 @@ export default function Hiraishindle() {
       | string[];
 
     if (answers.length) {
+      setVisibleIndexes(
+        answers.map(() => properties.map((_, propertyIndex) => propertyIndex))
+      );
       answers.some((answer) => answer === CHOSEN.name) && setIsFinished(true);
       setAnswers(answers);
     }
   }, []);
-
-  const chosenCharacter = characters.find((character) => character.name === CHOSEN.name)!;
-  const formattedCharacters = characters.filter((character) => {
-    if (answers.find((guess) => guess === character.name)) {
-      return false;
-    }
-
-    return text ? character.name.toLowerCase().startsWith(text.toLowerCase()) : true;
-  });
 
   const handleSubmitForm = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -87,7 +133,7 @@ export default function Hiraishindle() {
     setText('');
     setIsSelectOpen(false);
 
-    const newAnswers = [name, ...answers];
+    const newAnswers = [...answers, name];
 
     setAnswers(newAnswers);
 
@@ -186,7 +232,7 @@ export default function Hiraishindle() {
             ref={selectRef}
             className={cn(
               'w-full border top-[88px] left-0 h-[400px] ',
-              isSelectOpen ? 'absolute' : 'hidden'
+              isSelectOpen ? 'absolute z-50' : 'hidden'
             )}
           >
             <ScrollArea className="h-[inherit] bg-gray-800">
@@ -219,29 +265,34 @@ export default function Hiraishindle() {
               </div>
             ))}
           </div>
-          <div className="w-[160%] sm:w-[unset] mt-2 flex flex-col gap-2 text-center">
-            {answers.map((guess) => {
+          <div className="w-[160%] sm:w-[unset] mt-2 flex flex-col-reverse gap-2 text-center">
+            {answers.map((guess, row) => {
               const properties = Object.values(
                 characters.find((character) => character.name === guess)!
               );
 
               return (
                 <div className="flex gap-2" key={guess}>
-                  {properties.map((value, index) => {
+                  {properties.map((value, column) => {
                     const chosenCharacterValues = Object.values(chosenCharacter);
+                    const isVisible =
+                      visibleIndexes[row] && visibleIndexes[row].includes(column);
 
                     return (
                       <div
                         className={cn(
-                          'px-0.5 basis-[calc(16.6%-4px)] aspect-[0.95] transition-colors w-0 flex items-center justify-center font-semibold py-4 rounded-lg border-4-black data-[answer=incorrect]:bg-red-700 hover:data-[answer=incorrect]:bg-red-600 data-[answer=correct]:bg-green-700 hover:data-[answer=correct]:bg-green-600 data-[answer=semicorrect]:bg-yellow-700 hover:data-[answer=semicorrect]:bg-yellow-600',
-                          index === 0 && 'bg-gray-200 text-black'
+                          'opacity-0 transition-opacity duration-500',
+                          isVisible && 'opacity-100',
+                          column === 0 && 'bg-gray-200 text-black',
+                          'px-0.5 basis-[calc(16.6%-4px)] aspect-[0.95] w-0 flex items-center justify-center font-semibold py-4 rounded-lg border-4-black data-[answer=incorrect]:bg-red-700 hover:data-[answer=incorrect]:bg-red-600 data-[answer=correct]:bg-green-700 hover:data-[answer=correct]:bg-green-600 data-[answer=semicorrect]:bg-yellow-700 hover:data-[answer=semicorrect]:bg-yellow-600'
                         )}
                         data-answer={
-                          index !== 0 && checkAnswer(value, chosenCharacterValues[index])
+                          column !== 0 &&
+                          checkAnswer(value, chosenCharacterValues[column])
                         }
                         key={value.toString()}
                       >
-                        {formatProperty(value, chosenCharacterValues[index])}
+                        {formatProperty(value, chosenCharacterValues[column])}
                       </div>
                     );
                   })}
@@ -249,11 +300,13 @@ export default function Hiraishindle() {
               );
             })}
           </div>
-          {isFishined && (
-            <span id="gg" className="mt-6 block text-center text-4xl">
-              GG!
-            </span>
-          )}
+          {visibleIndexes[visibleIndexes.length - 1] &&
+            visibleIndexes[visibleIndexes.length - 1].length === properties.length &&
+            isFishined && (
+              <span id="gg" className="mt-6 block text-center text-4xl">
+                GG!
+              </span>
+            )}
         </div>
       )}
     </main>
