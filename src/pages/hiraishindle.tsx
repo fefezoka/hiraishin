@@ -48,14 +48,24 @@ export default function Hiraishindle() {
       return false;
     }
 
-    return text ? character.name.toLowerCase().startsWith(text.toLowerCase()) : true;
+    if (text) {
+      return character.name.toLowerCase().startsWith(text.toLowerCase());
+    }
+
+    return true;
   });
 
   useEffect(() => {
     if (answers.length === 0) return;
 
     const answerIndex = answers.length - 1;
-    setVisibleIndexes((prev) => [...prev, []]);
+
+    if (
+      visibleIndexes[answerIndex] &&
+      visibleIndexes[answerIndex].length === properties.length
+    ) {
+      return;
+    }
 
     properties.forEach((_, propertyIndex) => {
       setTimeout(() => {
@@ -69,6 +79,8 @@ export default function Hiraishindle() {
         });
       }, 500 * propertyIndex);
     });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answers]);
 
   useEffect(() => {
@@ -288,11 +300,13 @@ export default function Hiraishindle() {
               );
             })}
           </div>
-          {visibleIndexes.length === properties.length && isFishined && (
-            <span id="gg" className="mt-6 block text-center text-4xl">
-              GG!
-            </span>
-          )}
+          {visibleIndexes[visibleIndexes.length - 1] &&
+            visibleIndexes[visibleIndexes.length - 1].length === properties.length &&
+            isFishined && (
+              <span id="gg" className="mt-6 block text-center text-4xl">
+                GG!
+              </span>
+            )}
         </div>
       )}
     </main>
