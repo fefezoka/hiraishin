@@ -7,7 +7,7 @@ export const players = [
     accountId: 'ovsOjxRte-djtQ8ySz5uIHsjRWiaydkzHmerVntxv_C4MgQ',
   },
   {
-    title: 'Escravo',
+    title: 'Vagabundo',
     skin: 'Thresh_1',
     accountId: 'AXDxv0H6XL6pBxgut-TeGvE-Z3t6OqaZALlJ7tca-RxUIX8',
   },

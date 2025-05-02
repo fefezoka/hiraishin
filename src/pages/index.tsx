@@ -14,7 +14,7 @@ import { getCookie, setCookie } from 'cookies-next';
 import { Loading } from '@/components/loading';
 import { getTotalLP } from '@/utils/league-of-legends/get-total-lp';
 
-const LOL_VERSION = '15.7.1';
+const LOL_VERSION = '15.9.1';
 
 export default function Home() {
   const [queueType, setQueueType] = useState<Queue>('RANKED_SOLO_5x5');
