@@ -14,7 +14,7 @@ import { getCookie, setCookie } from 'cookies-next';
 import { Loading } from '@/components/loading';
 import { getTotalLP } from '@/utils/league-of-legends/get-total-lp';
 
-const LOL_VERSION = '14.24.1';
+const LOL_VERSION = '15.9.1';
 
 export default function Home() {
   const [queueType, setQueueType] = useState<Queue>('RANKED_SOLO_5x5');
@@ -123,7 +123,7 @@ export default function Home() {
                         getTotalLP(player.leagues[typeIndex]) -
                           getTotalLP(previousRanking?.[typeIndex]?.[player.gameName].elo);
 
-                      const winrate = Math.ceil(
+                      const winrate = Math.round(
                         (league.wins / (league.wins + league.losses)) * 100
                       );
 
@@ -237,11 +237,11 @@ export default function Home() {
                                 <p className="text-xxs  md:text-xs">
                                   {league.wins}V {league.losses}D -{' '}
                                   <span
-                                    className={`data-[winrate-above-50='false']:text-red-500 ${
-                                      winrate > 50 && 'text-green-500'
-                                    } ${winrate < 50 && 'text-red-500'}`}
+                                    className={`${winrate > 50 && 'text-green-400'} ${
+                                      winrate < 50 && 'text-red-400'
+                                    }`}
                                   >
-                                    {winrate.toFixed(0)}% Winrate
+                                    {winrate}% Winrate
                                   </span>
                                 </p>
                               </div>
