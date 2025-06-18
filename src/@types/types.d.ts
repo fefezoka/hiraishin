@@ -36,6 +36,7 @@ type League = {
   leaguePoints: number;
   index: number;
   totalLP: number;
+  winrate: number;
 } & Elo;
 
 type Elo = {

@@ -6,20 +6,14 @@ import { getTotalLP } from '@/utils/league-of-legends/get-total-lp';
 
 export const lolRouter = router({
   players: procedure.query(async () => {
-    const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
-
     const fetchPlayerData = async (info: (typeof players)[number]) => {
       const { data: player } = await axios.get<SummonerDto>(
         `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-account/${info.accountId}`
       );
 
-      await delay(500);
-
       const { data: account } = await axios.get<AccountDto>(
         `https://americas.api.riotgames.com/riot/account/v1/accounts/by-puuid/${player.puuid}`
       );
-
-      await delay(500);
 
       const { data: leagues } = await axios.get<League[]>(
         `https://br1.api.riotgames.com/lol/league/v4/entries/by-summoner/${player.id}`
@@ -35,7 +29,13 @@ export const lolRouter = router({
         ...player,
         ...account,
         leagues: [rankedSolo, rankedFlex].map((league) =>
-          league ? { ...league, totalLP: getTotalLP(league) } : null
+          league
+            ? {
+                ...league,
+                winrate: Math.round((league.wins / (league.wins + league.losses)) * 100),
+                totalLP: getTotalLP(league),
+              }
+            : null
         ),
       };
     };
@@ -45,9 +45,12 @@ export const lolRouter = router({
     const leagueRanking = [0, 1].map((index) => {
       return allPlayers
         .filter((player) => player.leagues[index])
-        .sort(
-          (a, b) => (b.leagues[index]?.totalLP || 0) - (a.leagues[index]?.totalLP || 0)
-        )
+        .sort((a, b) => {
+          const aLeague = a.leagues[index]!;
+          const bLeague = b.leagues[index]!;
+
+          return bLeague.totalLP - aLeague.totalLP || bLeague.winrate - aLeague.winrate;
+        })
         .reduce<Record<string, number>>((acc, player, i) => {
           const name = player.gameName;
           if (name) acc[name] = i + 1;

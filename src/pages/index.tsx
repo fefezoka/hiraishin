@@ -102,9 +102,7 @@ export default function Home() {
                   {players
                     .filter((player) => player.leagues[typeIndex])
                     .sort(
-                      (a, b) =>
-                        (a.leagues[typeIndex]?.index || 0) -
-                        (b.leagues[typeIndex]?.index || 0)
+                      (a, b) => a.leagues[typeIndex]!.index - b.leagues[typeIndex]!.index
                     )
                     .map((player, index) => {
                       const league = player.leagues[typeIndex]!;
@@ -112,11 +110,7 @@ export default function Home() {
                       const lpDiff =
                         previousRanking?.[typeIndex]?.[player.gameName] &&
                         getTotalLP(player.leagues[typeIndex]) -
-                          getTotalLP(previousRanking?.[typeIndex]?.[player.gameName].elo);
-
-                      const winrate = Math.round(
-                        (league.wins / (league.wins + league.losses)) * 100
-                      );
+                          getTotalLP(previousRanking[typeIndex][player.gameName].elo);
 
                       return (
                         <Collapsible.Root key={player.id}>
@@ -228,11 +222,11 @@ export default function Home() {
                                 <p className="text-xxs  md:text-xs">
                                   {league.wins}V {league.losses}D -{' '}
                                   <span
-                                    className={`${winrate > 50 && 'text-green-400'} ${
-                                      winrate < 50 && 'text-red-400'
-                                    }`}
+                                    className={`${
+                                      league.winrate > 50 && 'text-green-400'
+                                    } ${league.winrate < 50 && 'text-red-400'}`}
                                   >
-                                    {winrate}% Winrate
+                                    {league.winrate}% Winrate
                                   </span>
                                 </p>
                               </div>
