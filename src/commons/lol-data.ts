@@ -38,7 +38,7 @@ export const players = [
   },
   {
     title: 'Narigudo', // Ianguas
-    skin: 'Lucian_9',
+    skin: 'Varus_60',
     accountId: 'ETllTUNpgyOh8mJaT5Pavlf12Sz2YmevLVlymqqD8Uvbweg',
   },
   {
@@ -48,7 +48,7 @@ export const players = [
   },
   {
     title: 'Pereba', // Verona
-    skin: 'Samira_20',
+    skin: 'Kaisa_40',
     accountId: 'YK9pet125SQXFCM-wys_zHWFQDfpCUaTxXuM0MZoopTx0lQ',
   },
 ];
