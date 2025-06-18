@@ -3,9 +3,10 @@ import { procedure, router } from '../trpc';
 import axios from '../../service/axios';
 import { players } from '@/commons/lol-data';
 import { getTotalLP } from '@/utils/league-of-legends/get-total-lp';
+import { setCookie } from 'cookies-next';
 
 export const lolRouter = router({
-  players: procedure.query(async () => {
+  players: procedure.query(async ({ ctx }) => {
     const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
     const fetchPlayerData = async (info: (typeof players)[number]) => {
@@ -48,26 +49,49 @@ export const lolRouter = router({
 
     const allPlayers = await Promise.all(players.map(fetchPlayerData));
 
-    const leagueRanking = [0, 1].map((index) => {
-      return allPlayers
-        .filter((player) => player.leagues[index])
-        .sort((a, b) => {
-          const aLeague = a.leagues[index]!;
-          const bLeague = b.leagues[index]!;
+    const recordLeagueRanking = ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'].map(
+      (queueType, index) => {
+        const leagueRanking = allPlayers
+          .filter((player) => player.leagues[index])
+          .sort((a, b) => {
+            const aLeague = a.leagues[index]!;
+            const bLeague = b.leagues[index]!;
 
-          return bLeague.totalLP - aLeague.totalLP || bLeague.winrate - aLeague.winrate;
-        })
-        .reduce<Record<string, number>>((acc, player, i) => {
-          const name = player.gameName;
-          if (name) acc[name] = i + 1;
-          return acc;
-        }, {});
-    });
+            return bLeague.totalLP - aLeague.totalLP || bLeague.winrate - aLeague.winrate;
+          })
+          .reduce<Record<string, any>>((acc, curr, i) => {
+            const league = curr.leagues[index];
+
+            if (!league) return acc;
+
+            acc[curr.gameName] = {
+              index: i + 1,
+              elo: {
+                tier: league.tier,
+                rank: league.rank,
+                leaguePoints: league.leaguePoints,
+              },
+            };
+
+            return acc;
+          }, {});
+
+        setCookie(`hiraishin-${queueType}`, leagueRanking, {
+          req: ctx.req,
+          res: ctx.res,
+          expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+        });
+
+        return leagueRanking;
+      }
+    );
 
     return allPlayers.map((player) => ({
       ...player,
       leagues: player.leagues.map((league, index) =>
-        league ? { ...league, index: leagueRanking[index][player.gameName] } : null
+        league
+          ? { ...league, index: recordLeagueRanking[index][player.gameName].index }
+          : null
       ),
     }));
   }),

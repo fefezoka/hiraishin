@@ -25,34 +25,7 @@ export default function Home() {
     isLoading,
     isRefetching,
     refetch,
-  } = trpc.lolRouter.players.useQuery(undefined, {
-    onSuccess: (data) => {
-      Array<Queue>('RANKED_SOLO_5x5', 'RANKED_FLEX_SR').map((queueType, index) => {
-        setCookie(
-          `hiraishin-${queueType}`,
-          JSON.stringify(
-            data.reduce<Record<string, any>>((acc, curr) => {
-              const league = curr.leagues[index];
-
-              if (!league) return acc;
-
-              acc[curr.gameName] = {
-                index: league.index,
-                elo: {
-                  tier: league.tier,
-                  rank: league.rank,
-                  leaguePoints: league.leaguePoints,
-                },
-              };
-
-              return acc;
-            }, {}) as LeagueState
-          ),
-          { expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) }
-        );
-      });
-    },
-  });
+  } = trpc.lolRouter.players.useQuery();
 
   useEffect(() => {
     const previousSolo = JSON.parse(getCookie('hiraishin-RANKED_SOLO_5x5') || '{}');
