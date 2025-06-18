@@ -6,78 +6,61 @@ import { getTotalLP } from '@/utils/league-of-legends/get-total-lp';
 
 export const lolRouter = router({
   players: procedure.query(async () => {
-    return await Promise.all<Player>(
-      players.map(async (info) => {
-        const { data: player } = await axios.get<SummonerDto>(
-          `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-account/${info.accountId}`
-        );
+    const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
-        await new Promise((resolve) => setTimeout(resolve, 500));
-
-        const { data: account } = await axios.get<AccountDto>(
-          `https://americas.api.riotgames.com/riot/account/v1/accounts/by-puuid/${player.puuid}`
-        );
-
-        await new Promise((resolve) => setTimeout(resolve, 500));
-
-        const { data: leagues } = await axios.get<League[]>(
-          `https://br1.api.riotgames.com/lol/league/v4/entries/by-summoner/${player.id}`
-        );
-
-        return {
-          ...info,
-          ...player,
-          ...account,
-          leagues: [
-            leagues.find((league) => league.queueType === 'RANKED_SOLO_5x5'),
-            leagues.find((league) => league.queueType === 'RANKED_FLEX_SR'),
-          ].map((league) => {
-            if (!league) {
-              return null;
-            }
-
-            return {
-              ...league,
-              totalLP: getTotalLP(league),
-            };
-          }),
-        };
-      })
-    ).then((players) => {
-      const leagueRanking = ['RANKED_SOLO_5x5', 'RANKED_FLEX_SR'].map(
-        (_, index) =>
-          players
-            .filter((player) => player.leagues[index])
-            .sort((a, b) => b.leagues[index]!.totalLP - a.leagues[index]!.totalLP!)
-            .reduce(
-              (acc, curr, idx) =>
-                Object.assign(
-                  acc,
-                  (() => {
-                    if (!curr.leagues[index]) {
-                      return;
-                    }
-                    return { [curr.gameName]: idx + 1 };
-                  })(),
-                  {}
-                ),
-              {}
-            ) as Record<string, number>
+    const fetchPlayerData = async (info: (typeof players)[number]) => {
+      const { data: player } = await axios.get<SummonerDto>(
+        `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-account/${info.accountId}`
       );
 
-      return players.map((player) => {
-        return {
-          ...player,
-          leagues: player.leagues.map((league, index) => {
-            if (!league) {
-              return null;
-            }
+      await delay(500);
 
-            return { ...league, index: leagueRanking[index][player.gameName] };
-          }),
-        };
-      });
+      const { data: account } = await axios.get<AccountDto>(
+        `https://americas.api.riotgames.com/riot/account/v1/accounts/by-puuid/${player.puuid}`
+      );
+
+      await delay(500);
+
+      const { data: leagues } = await axios.get<League[]>(
+        `https://br1.api.riotgames.com/lol/league/v4/entries/by-summoner/${player.id}`
+      );
+
+      const rankedSolo =
+        leagues.find((league) => league.queueType === 'RANKED_SOLO_5x5') || null;
+      const rankedFlex =
+        leagues.find((league) => league.queueType === 'RANKED_FLEX_SR') || null;
+
+      return {
+        ...info,
+        ...player,
+        ...account,
+        leagues: [rankedSolo, rankedFlex].map((league) =>
+          league ? { ...league, totalLP: getTotalLP(league) } : null
+        ),
+      };
+    };
+
+    const allPlayers = await Promise.all(players.map(fetchPlayerData));
+
+    const leagueRanking = [0, 1].map((index) => {
+      return allPlayers
+        .filter((player) => player.leagues[index])
+        .sort(
+          (a, b) => (b.leagues[index]?.totalLP || 0) - (a.leagues[index]?.totalLP || 0)
+        )
+        .reduce<Record<string, number>>((acc, player, i) => {
+          const name = player.gameName;
+          if (name) acc[name] = i + 1;
+          return acc;
+        }, {});
     });
+
+    return allPlayers.map((player) => ({
+      ...player,
+      leagues: player.leagues.map((league, index) =>
+        league ? { ...league, index: leagueRanking[index][player.gameName] } : null
+      ),
+    }));
   }),
   matchHistory: procedure
     .input(

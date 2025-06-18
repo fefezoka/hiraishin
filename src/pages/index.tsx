@@ -14,7 +14,7 @@ import { getCookie, setCookie } from 'cookies-next';
 import { Loading } from '@/components/loading';
 import { getTotalLP } from '@/utils/league-of-legends/get-total-lp';
 
-const LOL_VERSION = '15.9.1';
+const LOL_VERSION = '15.12.1';
 
 export default function Home() {
   const [queueType, setQueueType] = useState<Queue>('RANKED_SOLO_5x5');
@@ -31,31 +31,22 @@ export default function Home() {
         setCookie(
           `hiraishin-${queueType}`,
           JSON.stringify(
-            data.reduce(
-              (acc, curr) =>
-                Object.assign(
-                  acc,
-                  (() => {
-                    const league = curr.leagues[index];
+            data.reduce<Record<string, any>>((acc, curr) => {
+              const league = curr.leagues[index];
 
-                    if (!league) {
-                      return;
-                    }
+              if (!league) return acc;
 
-                    return {
-                      [curr.gameName]: {
-                        index: league.index,
-                        elo: {
-                          tier: league.tier,
-                          rank: league.rank,
-                          leaguePoints: league.leaguePoints,
-                        },
-                      },
-                    };
-                  })()
-                ),
-              {}
-            ) as LeagueState
+              acc[curr.gameName] = {
+                index: league.index,
+                elo: {
+                  tier: league.tier,
+                  rank: league.rank,
+                  leaguePoints: league.leaguePoints,
+                },
+              };
+
+              return acc;
+            }, {}) as LeagueState
           ),
           { expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) }
         );
@@ -131,7 +122,7 @@ export default function Home() {
                         <Collapsible.Root key={player.id}>
                           <Collapsible.CollapsibleTrigger asChild>
                             <div className="md:px-[64px] mb-2 rounded-lg px-3 py-6 cursor-pointer flex items-center overflow-hidden justify-between text-sm md:text-base relative z-10">
-                              <div className="absolute top-0 md:-top-12 left-0 right-0 bottom-0 bg-black opacity-[40%] -z-10 overflow-hidden">
+                              <div className="absolute top-0 md:-top-12 left-0 right-0 bottom-0 bg-black opacity-[45%] -z-10 overflow-hidden">
                                 <Image
                                   draggable={false}
                                   src={
@@ -360,7 +351,7 @@ export const MatchHistory = ({ player, queue }: IMatchHistory) => {
                   >
                     {item !== 0 && (
                       <Image
-                        src={`http://ddragon.leagueoflegends.com/cdn/14.12.1/img/item/${item}.png`}
+                        src={`http://ddragon.leagueoflegends.com/cdn/${LOL_VERSION}/img/item/${item}.png`}
                         alt=""
                         fill
                       />
@@ -378,7 +369,7 @@ export const MatchHistory = ({ player, queue }: IMatchHistory) => {
                       <div key={participant.puuid} className="flex gap-1 items-center">
                         <Image
                           data-player={participant.puuid === player.puuid}
-                          src={`http://ddragon.leagueoflegends.com/cdn/14.12.1/img/champion/${participant.championName}.png`}
+                          src={`http://ddragon.leagueoflegends.com/cdn/${LOL_VERSION}/img/champion/${participant.championName}.png`}
                           alt=""
                           height={14}
                           width={14}

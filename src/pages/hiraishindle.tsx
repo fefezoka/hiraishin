@@ -40,7 +40,7 @@ export default function Hiraishindle() {
   const [isFishined, setIsFinished] = useState<boolean>();
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>();
   const selectRef = useOutsideClick(() => setIsSelectOpen(false));
-  const [visibleIndexes, setVisibleIndexes] = useState<number[][]>([]);
+  const [visibleIndexes, setVisibleIndexes] = useState<number[]>([]);
 
   const chosenCharacter = characters.find((character) => character.name === CHOSEN.name)!;
   const formattedCharacters = characters.filter((character) => {
@@ -60,21 +60,13 @@ export default function Hiraishindle() {
 
     const answerIndex = answers.length - 1;
 
-    if (
-      visibleIndexes[answerIndex] &&
-      visibleIndexes[answerIndex].length === properties.length
-    ) {
-      return;
-    }
+    if (visibleIndexes[answerIndex] === properties.length) return;
 
     properties.forEach((_, propertyIndex) => {
       setTimeout(() => {
         setVisibleIndexes((prev) => {
           const updatedMatrix = [...prev];
-          updatedMatrix[answerIndex] = [
-            ...(updatedMatrix[answerIndex] || []),
-            propertyIndex,
-          ];
+          updatedMatrix[answerIndex] = (updatedMatrix[answerIndex] || 0) + 1;
           return updatedMatrix;
         });
       }, 500 * propertyIndex);
@@ -103,9 +95,7 @@ export default function Hiraishindle() {
       | string[];
 
     if (answers.length) {
-      setVisibleIndexes(
-        answers.map(() => properties.map((_, propertyIndex) => propertyIndex))
-      );
+      setVisibleIndexes(answers.map(() => properties.length));
       answers.some((answer) => answer === CHOSEN.name) && setIsFinished(true);
       setAnswers(answers);
     }
@@ -275,8 +265,7 @@ export default function Hiraishindle() {
                 <div className="flex gap-2" key={guess}>
                   {properties.map((value, column) => {
                     const chosenCharacterValues = Object.values(chosenCharacter);
-                    const isVisible =
-                      visibleIndexes[row] && visibleIndexes[row].includes(column);
+                    const isVisible = visibleIndexes[row] > column;
 
                     return (
                       <div
@@ -300,8 +289,7 @@ export default function Hiraishindle() {
               );
             })}
           </div>
-          {visibleIndexes[visibleIndexes.length - 1] &&
-            visibleIndexes[visibleIndexes.length - 1].length === properties.length &&
+          {visibleIndexes[visibleIndexes.length - 1] === properties.length &&
             isFishined && (
               <span id="gg" className="mt-6 block text-center text-4xl">
                 GG!
