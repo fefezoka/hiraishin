@@ -31,31 +31,22 @@ export default function Home() {
         setCookie(
           `hiraishin-${queueType}`,
           JSON.stringify(
-            data.reduce(
-              (acc, curr) =>
-                Object.assign(
-                  acc,
-                  (() => {
-                    const league = curr.leagues[index];
+            data.reduce<Record<string, any>>((acc, curr) => {
+              const league = curr.leagues[index];
 
-                    if (!league) {
-                      return;
-                    }
+              if (!league) return acc;
 
-                    return {
-                      [curr.gameName]: {
-                        index: league.index,
-                        elo: {
-                          tier: league.tier,
-                          rank: league.rank,
-                          leaguePoints: league.leaguePoints,
-                        },
-                      },
-                    };
-                  })()
-                ),
-              {}
-            ) as LeagueState
+              acc[curr.gameName] = {
+                index: league.index,
+                elo: {
+                  tier: league.tier,
+                  rank: league.rank,
+                  leaguePoints: league.leaguePoints,
+                },
+              };
+
+              return acc;
+            }, {}) as LeagueState
           ),
           { expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) }
         );

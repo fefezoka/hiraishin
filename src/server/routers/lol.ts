@@ -8,7 +8,7 @@ export const lolRouter = router({
   players: procedure.query(async () => {
     const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
-    const fetchPlayerData = async (info: { accountId: string }) => {
+    const fetchPlayerData = async (info: (typeof players)[number]) => {
       const { data: player } = await axios.get<SummonerDto>(
         `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-account/${info.accountId}`
       );

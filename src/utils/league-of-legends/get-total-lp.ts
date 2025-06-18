@@ -19,6 +19,6 @@ export const getTotalLP = (elo: Elo | null) => {
   }
 
   const tierLP = baseLeaguePoints[elo.tier];
-  const rankIndex = ranks.indexOf(elo.rank);
+  const rankIndex = tierLP >= 2000 ? 0 : ranks.indexOf(elo.rank); // se o elo for mestre +, ignora a divisão
   return tierLP + rankIndex * 100 + elo.leaguePoints;
 };
