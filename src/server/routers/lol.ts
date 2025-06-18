@@ -6,14 +6,20 @@ import { getTotalLP } from '@/utils/league-of-legends/get-total-lp';
 
 export const lolRouter = router({
   players: procedure.query(async () => {
+    const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
     const fetchPlayerData = async (info: (typeof players)[number]) => {
       const { data: player } = await axios.get<SummonerDto>(
         `https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-account/${info.accountId}`
       );
 
+      await delay(500);
+
       const { data: account } = await axios.get<AccountDto>(
         `https://americas.api.riotgames.com/riot/account/v1/accounts/by-puuid/${player.puuid}`
       );
+
+      await delay(500);
 
       const { data: leagues } = await axios.get<League[]>(
         `https://br1.api.riotgames.com/lol/league/v4/entries/by-summoner/${player.id}`
