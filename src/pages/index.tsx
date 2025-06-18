@@ -14,7 +14,7 @@ import { getCookie, setCookie } from 'cookies-next';
 import { Loading } from '@/components/loading';
 import { getTotalLP } from '@/utils/league-of-legends/get-total-lp';
 
-const LOL_VERSION = '15.9.1';
+const LOL_VERSION = '15.12.1';
 
 export default function Home() {
   const [queueType, setQueueType] = useState<Queue>('RANKED_SOLO_5x5');
@@ -351,7 +351,7 @@ export const MatchHistory = ({ player, queue }: IMatchHistory) => {
                   >
                     {item !== 0 && (
                       <Image
-                        src={`http://ddragon.leagueoflegends.com/cdn/14.12.1/img/item/${item}.png`}
+                        src={`http://ddragon.leagueoflegends.com/cdn/${LOL_VERSION}/img/item/${item}.png`}
                         alt=""
                         fill
                       />
@@ -369,7 +369,7 @@ export const MatchHistory = ({ player, queue }: IMatchHistory) => {
                       <div key={participant.puuid} className="flex gap-1 items-center">
                         <Image
                           data-player={participant.puuid === player.puuid}
-                          src={`http://ddragon.leagueoflegends.com/cdn/14.12.1/img/champion/${participant.championName}.png`}
+                          src={`http://ddragon.leagueoflegends.com/cdn/${LOL_VERSION}/img/champion/${participant.championName}.png`}
                           alt=""
                           height={14}
                           width={14}
